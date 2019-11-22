@@ -23,8 +23,8 @@ public class Pair
 	{
 		this.card = card;
 		this.location = location;
-		x = -1000;
-		y = -1000;
+		this.x = -1; // initial invalid value
+		this.y = -1; // initial invalid value
 	}//END: Pair() constructor
 
 	public Pair(Pair that)
@@ -50,21 +50,25 @@ public class Pair
 		this.location = location;
 	}//END: set_location() method
 
-	public int getX() {
-		return x;
-	}
+	public int getX()
+	{
+		return this.x;
+	}//END: getY() method
 
-	public int getY() {
-		return y;
-	}
+	public int getY()
+	{
+		return this.y;
+	}//END: getY() method
 
-	public void setX(int newX) {
-		x = newX;
-	}
+	public void setX(int x)
+	{
+		this.x = x;
+	}//END: setX() method
 
-	public void setY(int newY) {
-		y = newY;
-	}
+	public void setY(int y)
+	{
+		this.y = y;
+	}//END: setY() method
 
 	/**
 	 * Represents a Pair object with a string by listing the card and its location
@@ -118,10 +122,10 @@ public class Pair
 	@Override
 	public boolean equals(Object obj)
 	{
-		if (!(obj instanceof Pair))
+		if (! (obj instanceof Pair))
 			return false;
 
-		if (!this.card.equals(((Pair) obj).get_card()))
+		if (! this.card.equals(((Pair) obj).get_card()))
 			return false;
 		if (this.location != ((Pair) obj).location)
 			return false;
