@@ -37,6 +37,9 @@ public class PalaceTest
         assertNotEquals(pgs.toString(), pgs2.toString());
     }
 
+    /**
+     * @author Andres Giesemann
+     */
     @Test
     public void copyConstructor(){
         PalaceGameState pgs = new PalaceGameState();
@@ -45,6 +48,9 @@ public class PalaceTest
         assertEquals(pgs.toString(), pgs2.toString());
     }
 
+    /**
+     * @author Fredrik Olsson
+     */
     @Test
     public void selectCardsTest()
     {
@@ -74,6 +80,7 @@ public class PalaceTest
      * First, selects a card and then plays it.
      *
      * Checks that the played card is in the discard pile
+     * @author Andres Giesemann
      */
     @Test
     public void playCardsTest()
@@ -105,6 +112,7 @@ public class PalaceTest
     /**
      * tests changePalace method from PalaceGameState by checking to see that upper palace cards
      * are moved to the proper user's hand.
+     * @author Fredrik Olsson
      */
     @Test
     public void changePalaceTest()
@@ -141,6 +149,7 @@ public class PalaceTest
      * player's hand.
      *
      * Starts by playing a card so that the discard pile is not empty
+     * @author Andres Giesemann
      */
     @Test
     public void takeDiscardPileTest()
@@ -186,5 +195,11 @@ public class PalaceTest
 
 	    assertEquals(0, after);
 
+    }
+
+    @Test
+    public void playLowerPalaceCardTest() {
+        PalaceGameState pgs = new PalaceGameState();
+        
     }
 }

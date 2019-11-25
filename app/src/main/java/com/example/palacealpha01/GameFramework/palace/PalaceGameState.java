@@ -192,6 +192,32 @@ public class PalaceGameState extends GameState
 
 	}//selectPalaceCards
 
+	public boolean playLowerPalaceCard(int playerID, Pair userSelectedCard) {
+
+		if (isLegal(userSelectedCard)){
+			selectCards(playerID, userSelectedCard);
+			playCards(playerID);
+			return true;
+		}
+
+		else {
+			if (userSelectedCard.get_location() == Location.PLAYER_ONE_LOWER_PALACE && getPlayerOneHandSize() == 0 && getPlayerOneUpperPalaceSize() == 0) {
+				selectedCards.add(userSelectedCard);
+				playCards(playerID);
+				takeDiscardPile(playerID);
+				return true;
+			}
+			else if (userSelectedCard.get_location() == Location.PLAYER_TWO_LOWER_PALACE && getPlayerTwoHandSize() == 0 && getPlayerTwoUpperPalaceSize() == 0) {
+				selectedCards.add(userSelectedCard);
+				playCards(playerID);
+				takeDiscardPile(playerID);
+				return true;
+			}
+		}
+
+		return false;
+	}
+
 	/**
 	 * playCards method:
 	 * Places all selected cards into the discard pile. Bombs the discard pile (bombDiscardPile()) if

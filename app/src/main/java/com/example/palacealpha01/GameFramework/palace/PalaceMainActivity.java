@@ -22,7 +22,7 @@ import java.util.ArrayList;
 public class PalaceMainActivity extends GameMainActivity implements View.OnClickListener
 {
 
-	//private static final String TAG = "PalaceMainActivity";
+	private static final String TAG = "PalaceMainActivity";
 	public static final int PORT_NUMBER = 5213;
 
 	/**

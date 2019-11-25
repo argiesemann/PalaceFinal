@@ -11,13 +11,20 @@ import com.example.palacealpha01.GameFramework.actionMessage.GameAction;
  */
 public class PalacePlayLowerPalaceCardAction extends GameAction
 {
+
+    private Pair userSelectedCard;
     /**
      * constructor for GameAction
      *
      * @param player the player who created the action
      */
-    public PalacePlayLowerPalaceCardAction(GamePlayer player)
+    public PalacePlayLowerPalaceCardAction(GamePlayer player, Pair userSelectedCard)
     {
         super(player);
+        this.userSelectedCard = userSelectedCard;
     }//PalacePlayLowerPalaceCardAction
+
+    public Pair getUserSelectedCard() {
+        return userSelectedCard;
+    }
 }//class PalacePlayLowerPalaceCardAction

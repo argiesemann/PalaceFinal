@@ -301,6 +301,33 @@ public class PalaceLocalGame extends LocalGame
 
 		}
 
+		else if (action instanceof PalacePlayLowerPalaceCardAction) {
+
+			if (canMove(playerNum))
+			{
+				Pair pair = ((PalacePlayLowerPalaceCardAction) action).getUserSelectedCard();
+
+				if (pgs.getTurn() == 0)
+				{
+					pgs.playLowerPalaceCard(0, pair);
+					if (pair.get_location() != Location.PLAYER_ONE_LOWER_PALACE) {
+						pgs.setTurn(1);
+					}
+					return true;
+				}
+				else
+				{
+					pgs.playLowerPalaceCard(1, pair);
+					if (pair.get_location() != Location.PLAYER_TWO_LOWER_PALACE) {
+						pgs.setTurn(0);
+					}
+					return true;
+				}
+
+			}
+
+		}
+
 		return false;
 	}//makeMove
 }//class PalaceLocalGame

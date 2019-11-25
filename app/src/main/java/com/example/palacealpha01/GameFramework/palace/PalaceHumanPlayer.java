@@ -34,6 +34,9 @@ public class PalaceHumanPlayer extends GameHumanPlayer implements View.OnClickLi
 	private Activity myActivity;
 	private PalaceSurfaceView palaceSurfaceView;
 	private int layoutId;
+	private Location handLoc;
+	private Location upLoc;
+	private Location lowLoc;
 	//the pictures are stored in a hashmap and are initialized in the initCardImages-method.
 	private Hashtable<String, Bitmap> pictures = new Hashtable<>();
 	private PalaceGameState pgs;
@@ -63,7 +66,9 @@ public class PalaceHumanPlayer extends GameHumanPlayer implements View.OnClickLi
 		lastTapX = 0;
 		lastTapY = 0;
 		tappedCard = null;
-
+		handLoc = (this.playerNum == 0)? Location.PLAYER_ONE_HAND : Location.PLAYER_TWO_HAND;
+		upLoc = (this.playerNum == 0)? Location.PLAYER_ONE_UPPER_PALACE : Location.PLAYER_TWO_UPPER_PALACE;
+		lowLoc = (this.playerNum == 0)? Location.PLAYER_ONE_LOWER_PALACE : Location.PLAYER_TWO_LOWER_PALACE;
 
 	}//PalaceHumanPlayer
 
@@ -313,7 +318,7 @@ public class PalaceHumanPlayer extends GameHumanPlayer implements View.OnClickLi
                 return false;
             }
 
-            if (tappedCard.get_location() == Location.PLAYER_ONE_HAND) {
+            if (tappedCard.get_location() == handLoc) {
                 if (pgs.getIsChangingPalace()) {
                     game.sendAction(new PalaceSelectPalaceCardAction(this, tappedCard));
                 } else {
@@ -328,7 +333,7 @@ public class PalaceHumanPlayer extends GameHumanPlayer implements View.OnClickLi
                         game.sendAction(new PalaceSelectCardAction(this, tappedCard));
                     }
                 }
-            } else if (tappedCard.get_location() == Location.PLAYER_ONE_UPPER_PALACE) {
+            } else if (tappedCard.get_location() == upLoc) {
                 if (lastTapY - 50 > event.getY()) {
 					if (pgs.getSelectedCards().isEmpty()) {
 						game.sendAction(new PalaceSelectCardAction(this, tappedCard));
@@ -340,8 +345,8 @@ public class PalaceHumanPlayer extends GameHumanPlayer implements View.OnClickLi
                 else {
                     game.sendAction(new PalaceSelectCardAction(this, tappedCard));
                 }
-            } else if (tappedCard.get_location() == Location.PLAYER_ONE_LOWER_PALACE) {
-                game.sendAction(new PalaceSelectCardAction(this, tappedCard));
+            } else if (tappedCard.get_location() == lowLoc) {
+                game.sendAction(new PalacePlayLowerPalaceCardAction(this, tappedCard));
             } else if (tappedCard.get_location() == Location.DISCARD_PILE) {
                 game.sendAction(new PalaceTakeDiscardPileAction(this));
             }
