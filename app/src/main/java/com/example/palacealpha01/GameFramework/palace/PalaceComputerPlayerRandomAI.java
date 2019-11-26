@@ -14,7 +14,7 @@ import java.util.ArrayList;
  * @version November 2019
  */
 
-public class PalaceComputerPlayer extends GameComputerPlayer
+public class PalaceComputerPlayerRandomAI extends GameComputerPlayer
 {
 
 	private Location handLoc;
@@ -22,15 +22,14 @@ public class PalaceComputerPlayer extends GameComputerPlayer
 	private Location lowLoc;
 	private boolean locationsAreSet = false;
 	/**
-	 * PalaceComputerPlayer method:
-	 * The PalaceComputerPlayer is exteneded from the GameComputerPlayer Class
+	 * PalaceComputerPlayerRandomAI method:
+	 * The PalaceComputerPlayerRandomAI is exteneded from the GameComputerPlayer Class
 	 * @param name
 	 */
-	public PalaceComputerPlayer(String name)
+	public PalaceComputerPlayerRandomAI(String name)
 	{
 		super(name);
-
-	}//PalaceComputerPlayer
+	}//PalaceComputerPlayerRandomAI
 
 	/**
 	 *receiveInfo method:
@@ -65,7 +64,7 @@ public class PalaceComputerPlayer extends GameComputerPlayer
 					return;
 				}
 
-		//game.sendAction(new PalaceSkipTurn(this));
+				//game.sendAction(new PalaceSkipTurn(this));
 
 				//used for temporarily storing the cards in computer player's hand and palace
 				ArrayList<Pair> player_two_hand = new ArrayList<>();
@@ -124,4 +123,4 @@ public class PalaceComputerPlayer extends GameComputerPlayer
 			}
 		}
 	}//receiveInfo
-}//class PalaceComputerPlayer
+}//class PalaceComputerPlayerRandomAI

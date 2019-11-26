@@ -266,13 +266,11 @@ public class PalaceGameState extends GameState
 			}*/
 
 
-			if (playerID == 0) {
+			if (playerID == 0 && p1CanChangePalace)
 				p1CanChangePalace = false;
-			}
 
-			else if (playerID == 1) {
+			else if (playerID == 1 && p2CanChangePalace)
 				p2CanChangePalace = false;
-			}
 
 			return true;
 		}
@@ -419,7 +417,7 @@ public class PalaceGameState extends GameState
 				}
 				selectedCards.clear();
 				isChangingPalace = false;
-				p1CanChangePalace = false;
+//				p1CanChangePalace = false;
 				return true;
 			}
 		}
@@ -440,7 +438,7 @@ public class PalaceGameState extends GameState
 				}
 				selectedCards.clear();
 				isChangingPalace = false;
-				p2CanChangePalace = false;
+//				p2CanChangePalace = false;
 				return true;
 			}
 		}
