@@ -54,7 +54,7 @@ public class PalaceComputerPlayerRandomAI extends GameComputerPlayer
 					return;
 				}
 
-		//game.sendAction(new PalaceSkipTurn(this));
+				//game.sendAction(new PalaceSkipTurn(this));
 
 				//used for temporarily storing the cards in computer player's hand and palace
 				ArrayList<Pair> player_two_hand = new ArrayList<>();
