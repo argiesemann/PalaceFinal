@@ -14,18 +14,18 @@ import java.util.ArrayList;
  * @version November 2019
  */
 
-public class PalaceComputerPlayer extends GameComputerPlayer
+public class PalaceComputerPlayerRandomAI extends GameComputerPlayer
 {
 
 	/**
-	 * PalaceComputerPlayer method:
-	 * The PalaceComputerPlayer is exteneded from the GameComputerPlayer Class
+	 * PalaceComputerPlayerRandomAI method:
+	 * The PalaceComputerPlayerRandomAI is exteneded from the GameComputerPlayer Class
 	 * @param name
 	 */
-	public PalaceComputerPlayer(String name)
+	public PalaceComputerPlayerRandomAI(String name)
 	{
 		super(name);
-	}//PalaceComputerPlayer
+	}//PalaceComputerPlayerRandomAI
 
 	/**
 	 *receiveInfo method:
@@ -113,4 +113,4 @@ public class PalaceComputerPlayer extends GameComputerPlayer
 			}
 		}
 	}//receiveInfo
-}//class PalaceComputerPlayer
+}//class PalaceComputerPlayerRandomAI

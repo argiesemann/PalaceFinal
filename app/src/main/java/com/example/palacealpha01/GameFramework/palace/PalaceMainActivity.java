@@ -1,15 +1,10 @@
 package com.example.palacealpha01.GameFramework.palace;
 
-import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
 
 import com.example.palacealpha01.GameFramework.GameMainActivity;//
 import com.example.palacealpha01.GameFramework.GamePlayer;
 import com.example.palacealpha01.GameFramework.LocalGame;//
-import com.example.palacealpha01.GameFramework.ProxyGame;
 import com.example.palacealpha01.GameFramework.gameConfiguration.GameConfig;//
 import com.example.palacealpha01.GameFramework.gameConfiguration.GamePlayerType;
 //import com.example.palacealpha01.R;
@@ -44,7 +39,7 @@ public class PalaceMainActivity extends GameMainActivity implements View.OnClick
 		{
 			public GamePlayer createPlayer(String name)
 			{
-				return new PalaceComputerPlayer(name);
+				return new PalaceComputerPlayerRandomAI(name);
 			}
 		});
 		// Create a game configuration class for Tic-tac-toe
