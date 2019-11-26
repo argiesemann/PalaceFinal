@@ -372,4 +372,8 @@ public class PalaceHumanPlayer extends GameHumanPlayer implements View.OnClickLi
 		}
 		return lastTapY + 50 < event.getY();
 	}
+
+	public int getPlayerNum() {
+		return playerNum;
+	}
 }//class PalaceHumanPlayer
