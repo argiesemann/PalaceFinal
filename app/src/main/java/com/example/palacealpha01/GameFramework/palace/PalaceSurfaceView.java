@@ -300,7 +300,8 @@ public class PalaceSurfaceView extends SurfaceView
 			{
 				drawSelectionBox(canvas, xP2H, yP2H);
 			}
-			canvas.drawBitmap(cardBack, xP2H, yP2H, bitmapPaint);
+			//canvas.drawBitmap(cardBack, xP2H, yP2H, bitmapPaint);
+			canvas.drawBitmap(pictures.get(p.get_card().toString()), xP2H, yP2H, bitmapPaint);
 			p.setX(xP2H);
 			p.setY(yP2H);
 			xP2H += cardWidth + 5;

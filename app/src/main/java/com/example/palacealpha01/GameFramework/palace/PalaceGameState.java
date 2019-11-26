@@ -535,16 +535,16 @@ public class PalaceGameState extends GameState
 			for (int i = 0; i < 52; i++) {
 
 				if (i < 3) {
-					the_deck.get(i).set_location(Location.PLAYER_ONE_LOWER_PALACE);
-				}
-				else if (i < 6) {
 					the_deck.get(i).set_location(Location.PLAYER_TWO_LOWER_PALACE);
 				}
+				else if (i < 6) {
+					the_deck.get(i).set_location(Location.PLAYER_ONE_LOWER_PALACE);
+				}
 				else if (i < 9) {
-					the_deck.get(i).set_location(Location.PLAYER_TWO_UPPER_PALACE);
+					the_deck.get(i).set_location(Location.PLAYER_ONE_UPPER_PALACE);
 				}
 				else {
-					the_deck.get(i).set_location(Location.PLAYER_TWO_HAND);
+					the_deck.get(i).set_location(Location.PLAYER_ONE_HAND);
 				}
 			}
 		}
@@ -694,11 +694,11 @@ public class PalaceGameState extends GameState
 		return gameStateString;
 	}//toString
 
-	public Pair getPairAt(int x, int y) {
+	public Pair getPairAt(int x, int y, Location lowerPalaceLoc) {
 		//Bitmap cardBack = BitmapFactory.decodeResource(getResources(), R.drawable.back);
 		for (Pair p : the_deck) {
 			if (x > p.getX() && x < p.getX() + cardWidth && y > p.getY() && y < p.getY() + cardHeight) {
-				if (p.get_location() != Location.PLAYER_ONE_LOWER_PALACE) {
+				if (p.get_location() != lowerPalaceLoc) {
 					return p;
 				}
 			}
@@ -706,7 +706,7 @@ public class PalaceGameState extends GameState
 
 		for (Pair p : the_deck) {
 			if (x > p.getX() && x < p.getX() + cardWidth && y > p.getY() && y < p.getY() + cardHeight) {
-				if (p.get_location() == Location.PLAYER_ONE_LOWER_PALACE) {
+				if (p.get_location() == lowerPalaceLoc) {
 					return p;
 				}
 			}

@@ -66,9 +66,7 @@ public class PalaceHumanPlayer extends GameHumanPlayer implements View.OnClickLi
 		lastTapX = 0;
 		lastTapY = 0;
 		tappedCard = null;
-		handLoc = (this.playerNum == 0)? Location.PLAYER_ONE_HAND : Location.PLAYER_TWO_HAND;
-		upLoc = (this.playerNum == 0)? Location.PLAYER_ONE_UPPER_PALACE : Location.PLAYER_TWO_UPPER_PALACE;
-		lowLoc = (this.playerNum == 0)? Location.PLAYER_ONE_LOWER_PALACE : Location.PLAYER_TWO_LOWER_PALACE;
+
 
 	}//PalaceHumanPlayer
 
@@ -156,8 +154,14 @@ public class PalaceHumanPlayer extends GameHumanPlayer implements View.OnClickLi
 	{
 		Button leftButton = myActivity.findViewById(R.id.leftButton);
 		leftButton.setOnClickListener(this);
+		if (this.playerNum == 1) {
+			leftButton.setY(leftButton.getY() - 7*palaceSurfaceView.getHeight()/10);
+		}
 		Button rightButton = myActivity.findViewById(R.id.rightButton);
 		rightButton.setOnClickListener(this);
+		if (this.playerNum == 1) {
+			rightButton.setY(rightButton.getY() - 7*palaceSurfaceView.getHeight()/10);
+		}
 		Button palaceButton = myActivity.findViewById(R.id.PalaceButton);
 		palaceButton.setOnClickListener(this);
 		Button playCardButton = myActivity.findViewById(R.id.playCardButton);
@@ -165,6 +169,9 @@ public class PalaceHumanPlayer extends GameHumanPlayer implements View.OnClickLi
 		Button confirmPalace = myActivity.findViewById(R.id.confirmPalace);
 		confirmPalace.setOnClickListener(this);
 		palaceSurfaceView.setGame(game);
+		handLoc = (this.playerNum == 0)? Location.PLAYER_ONE_HAND : Location.PLAYER_TWO_HAND;
+		upLoc = (this.playerNum == 0)? Location.PLAYER_ONE_UPPER_PALACE : Location.PLAYER_TWO_UPPER_PALACE;
+		lowLoc = (this.playerNum == 0)? Location.PLAYER_ONE_LOWER_PALACE : Location.PLAYER_TWO_LOWER_PALACE;
 
 	}//initAfterReady
 
@@ -308,7 +315,7 @@ public class PalaceHumanPlayer extends GameHumanPlayer implements View.OnClickLi
 		if (event.getAction() == MotionEvent.ACTION_DOWN) {
 		    lastTapX = (int) event.getX();
 		    lastTapY = (int) event.getY();
-			tappedCard = pgs.getPairAt(lastTapX, lastTapY);
+			tappedCard = pgs.getPairAt(lastTapX, lastTapY, lowLoc);
 			return true;
 		}
 
@@ -322,7 +329,7 @@ public class PalaceHumanPlayer extends GameHumanPlayer implements View.OnClickLi
                 if (pgs.getIsChangingPalace()) {
                     game.sendAction(new PalaceSelectPalaceCardAction(this, tappedCard));
                 } else {
-                    if (lastTapY - 50 > event.getY()) {
+                    if (isntSwipe(lastTapY, event)) {
                     	if (pgs.getSelectedCards().isEmpty()) {
 							game.sendAction(new PalaceSelectCardAction(this, tappedCard));
 						}
@@ -334,7 +341,7 @@ public class PalaceHumanPlayer extends GameHumanPlayer implements View.OnClickLi
                     }
                 }
             } else if (tappedCard.get_location() == upLoc) {
-                if (lastTapY - 50 > event.getY()) {
+                if (isntSwipe(lastTapY, event)) {
 					if (pgs.getSelectedCards().isEmpty()) {
 						game.sendAction(new PalaceSelectCardAction(this, tappedCard));
 					}
@@ -357,5 +364,12 @@ public class PalaceHumanPlayer extends GameHumanPlayer implements View.OnClickLi
 
 		v.invalidate();
 		return true;
+	}
+
+	private boolean isntSwipe(int lastTapY, MotionEvent event) {
+		if (this.playerNum == 0) {
+			return lastTapY - 50 > event.getY();
+		}
+		return lastTapY + 50 < event.getY();
 	}
 }//class PalaceHumanPlayer

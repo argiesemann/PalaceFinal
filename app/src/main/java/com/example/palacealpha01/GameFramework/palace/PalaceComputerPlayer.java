@@ -17,6 +17,10 @@ import java.util.ArrayList;
 public class PalaceComputerPlayer extends GameComputerPlayer
 {
 
+	private Location handLoc;
+	private Location upLoc;
+	private Location lowLoc;
+	private boolean locationsAreSet = false;
 	/**
 	 * PalaceComputerPlayer method:
 	 * The PalaceComputerPlayer is exteneded from the GameComputerPlayer Class
@@ -25,6 +29,7 @@ public class PalaceComputerPlayer extends GameComputerPlayer
 	public PalaceComputerPlayer(String name)
 	{
 		super(name);
+
 	}//PalaceComputerPlayer
 
 	/**
@@ -35,6 +40,12 @@ public class PalaceComputerPlayer extends GameComputerPlayer
 	@Override
 	protected void receiveInfo(GameInfo info)
 	{
+		if (!locationsAreSet) {
+			handLoc = (this.playerNum == 0) ? Location.PLAYER_ONE_HAND : Location.PLAYER_TWO_HAND;
+			upLoc = (this.playerNum == 0) ? Location.PLAYER_ONE_UPPER_PALACE : Location.PLAYER_TWO_UPPER_PALACE;
+			lowLoc = (this.playerNum == 0) ? Location.PLAYER_ONE_LOWER_PALACE : Location.PLAYER_TWO_LOWER_PALACE;
+			locationsAreSet = true;
+		}
 		if (info instanceof NotYourTurnInfo)
 			return;
 
@@ -64,7 +75,7 @@ public class PalaceComputerPlayer extends GameComputerPlayer
 
 				//if there are any cards in computer player's hand, add them to player_two_hand
 				for (Pair p : pgs.the_deck)
-					if (p.get_location() == Location.PLAYER_TWO_HAND)
+					if (p.get_location() == handLoc)
 					{
 						player_two_hand.add(p);
 						//if any of these cards are legal, add them to legalCards arraylist.
@@ -75,7 +86,7 @@ public class PalaceComputerPlayer extends GameComputerPlayer
 				//repeats above procedure on upper palace cards, if computer's hand is empty
 				if (player_two_hand.size() == 0)
 					for (Pair p : pgs.the_deck)
-						if (p.get_location() == Location.PLAYER_TWO_UPPER_PALACE)
+						if (p.get_location() == upLoc)
 						{
 							player_two_hand.add(p);
 							if(pgs.isLegal(p)){
@@ -85,7 +96,7 @@ public class PalaceComputerPlayer extends GameComputerPlayer
 				//repeats above process on lower palace cards if computer's hand and upper palace is empty
 				if (player_two_hand.size() == 0)
 					for (Pair p : pgs.the_deck)
-						if (p.get_location() == Location.PLAYER_TWO_LOWER_PALACE)
+						if (p.get_location() == lowLoc)
 						{
 							player_two_hand.add(p);
 							if(pgs.isLegal(p)){
