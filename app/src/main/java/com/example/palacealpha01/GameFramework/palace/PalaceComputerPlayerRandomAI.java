@@ -23,7 +23,7 @@ public class PalaceComputerPlayerRandomAI extends GameComputerPlayer
 	private boolean locationsAreSet = false;
 	/**
 	 * PalaceComputerPlayerRandomAI method:
-	 * The PalaceComputerPlayerRandomAI is exteneded from the GameComputerPlayer Class
+	 * The PalaceComputerPlayerRandomAI is extended from the GameComputerPlayer Class
 	 * @param name
 	 */
 	public PalaceComputerPlayerRandomAI(String name)

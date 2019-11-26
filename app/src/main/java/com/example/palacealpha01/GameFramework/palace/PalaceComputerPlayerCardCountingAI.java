@@ -15,7 +15,7 @@ public class PalaceComputerPlayerCardCountingAI extends GameComputerPlayer
 	/**
 	 * @author Maximilian
 	 */
-	private enum Location
+	private enum CCAILocation
 	{
 		UNKNOWN,
 		CCAI,
@@ -25,6 +25,11 @@ public class PalaceComputerPlayerCardCountingAI extends GameComputerPlayer
 		DEAD_PILE
 	}//END: Location enum
 
+	private Location my_hand;
+	private Location my_upper_palace;
+	private Location my_lower_palace;
+	private boolean are_locations_set;
+
 	/**
 	 *
 	 * @param name
@@ -32,6 +37,7 @@ public class PalaceComputerPlayerCardCountingAI extends GameComputerPlayer
 	public PalaceComputerPlayerCardCountingAI(String name)
 	{
 		super(name);
+		this.are_locations_set = false;
 	}//END: PalaceComputerPlayerCardCountingAI() constructor
 
 	/**
@@ -41,6 +47,23 @@ public class PalaceComputerPlayerCardCountingAI extends GameComputerPlayer
 	@Override
 	protected void receiveInfo(GameInfo info)
 	{
+		if (! this.are_locations_set)
+		{
+			if (this.playerNum == 0)
+			{
+				this.my_hand         = Location.PLAYER_ONE_HAND;
+				this.my_upper_palace = Location.PLAYER_ONE_UPPER_PALACE;
+				this.my_lower_palace = Location.PLAYER_ONE_LOWER_PALACE;
+			}
+			else if (this.playerNum == 1)
+			{
+				this.my_hand         = Location.PLAYER_TWO_HAND;
+				this.my_upper_palace = Location.PLAYER_TWO_UPPER_PALACE;
+				this.my_lower_palace = Location.PLAYER_TWO_LOWER_PALACE;
+			}
+			this.are_locations_set = true;
+		}
+
 		if (info instanceof NotYourTurnInfo)
 			return;
 
