@@ -42,7 +42,7 @@ public class PalaceMainActivity extends GameMainActivity implements View.OnClick
 				return new PalaceComputerPlayerRandomAI(name);
 			}
 		});
-		// Create a game configuration class for Tic-tac-toe
+		// Create a game configuration class for Palace
 		GameConfig defaultConfig = new GameConfig(playerTypes, 2, 2, "Palace", PORT_NUMBER);
 
 		defaultConfig.addPlayer("Human", 0);

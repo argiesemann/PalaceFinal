@@ -3,7 +3,9 @@ package com.example.palacealpha01.GameFramework.palace;
 import com.example.palacealpha01.GameFramework.GamePlayer;
 import com.example.palacealpha01.GameFramework.actionMessage.GameAction;
 
-public class PalaceTakeDiscardPileAction extends GameAction
+import java.io.Serializable;
+
+public class PalaceTakeDiscardPileAction extends GameAction implements Serializable
 {
 	/**
 	 * constructor for GameAction

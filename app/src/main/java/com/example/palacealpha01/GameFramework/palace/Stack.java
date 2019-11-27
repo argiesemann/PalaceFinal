@@ -3,6 +3,7 @@
  */
 package com.example.palacealpha01.GameFramework.palace;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 /**
@@ -12,7 +13,7 @@ import java.util.ArrayList;
  * We plan to use this for the discard pile, because the discard pile is most easily represented as
  * as stack.
  */
-public class Stack
+public class Stack implements Serializable
 {
 	/**
 	 * @author Maximilian
