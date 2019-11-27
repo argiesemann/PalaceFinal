@@ -7,6 +7,10 @@ import com.example.palacealpha01.GameFramework.GameComputerPlayer;
 import com.example.palacealpha01.GameFramework.infoMessage.GameInfo;
 import com.example.palacealpha01.GameFramework.infoMessage.NotYourTurnInfo;
 
+import java.util.ArrayList;
+
+import static com.example.palacealpha01.GameFramework.palace.Rank.TEN_INT;
+
 /**
  * @author Maximilian
  */
@@ -54,13 +58,110 @@ public class PalaceComputerPlayerSmartAI extends GameComputerPlayer
 		if (info instanceof NotYourTurnInfo)
 			return;
 
-		if (info instanceof PalaceGameState)
+		if (info instanceof PalaceGameState &&
+			((PalaceGameState) info).getTurn() == this.playerNum)
 		{
 			info.setGame(game);
 			PalaceGameState pgs = (PalaceGameState) info;
 
-			// TODO: complete this method
-			//pgs.doSomeStuff()
+			// TODO LIST:
+			//		implement Smart AI's ability to play multiple legal cards at a time ???
+			//			maybe a good idea, or maybe a better strategy to not
+			//		implement Smart AI's ability to modify its upper palace at game start
+
+			// if we've already selected a card,
+			// 		then play it
+			if (pgs.getSelectedCards().size() > 0)
+			{
+				sleep(2);
+				game.sendAction(new PalacePlayCardAction(this));
+				return;
+			}
+
+			ArrayList<Pair> legal_hand 		   = new ArrayList<>();
+			ArrayList<Pair> legal_upper_palace = new ArrayList<>();
+			ArrayList<Pair> lower_palace       = new ArrayList<>();
+			boolean has_hand         = false;
+			boolean has_upper_palace = false;
+
+			for (Pair p : pgs.the_deck)
+			{
+				Location tmp = p.get_location();
+				if (tmp == my_hand)
+				{
+					has_hand = true;
+					if (pgs.isLegal(p))
+						legal_hand.add(p);
+				}
+				else if (tmp == my_upper_palace)
+				{
+					has_upper_palace = true;
+					if (has_hand)
+						legal_upper_palace.add(p);
+					else if (pgs.isLegal(p))
+						legal_upper_palace.add(p);
+				}
+				else if (tmp == my_lower_palace)
+					lower_palace.add(p);
+			}
+
+			// if we have cards in our hand, but none are playable, or have cards in our upper palace,
+			// but none are playable,
+			//		then take the discard pile
+			if (has_hand         && legal_hand.size()         == 0 ||
+				has_upper_palace && legal_upper_palace.size() == 0)
+			{
+				sleep(2);
+				game.sendAction(new PalaceTakeDiscardPileAction(this));
+				return;
+			}
+
+			// if we don't have cards in neither our hand, nor our upper palace,
+			//		then randomly select are card from our lower palace
+			if (! has_hand         &&
+				! has_upper_palace)
+			{
+				game.sendAction(new PalaceSelectCardAction(this,
+						lower_palace.get((int) (Math.random() * lower_palace.size()))));
+				return;
+			}
+
+			if (has_hand)
+			{
+				Pair smallest_pair = null;
+				int smallest_rank = TEN_INT + 1;
+				int pair_int;
+				for (Pair pair : legal_hand)
+				{
+					pair_int = pair.get_card().get_rank().get_int_value();
+					if (pair_int < smallest_rank)
+					{
+						smallest_pair = pair;
+						smallest_rank = pair_int;
+					}
+				}
+
+				game.sendAction(new PalaceSelectCardAction(this, smallest_pair));
+				return;
+			}
+			else
+			{
+				Pair smallest_pair = null;
+				int smallest_rank = TEN_INT + 1;
+				int pair_int;
+				for (Pair pair : legal_upper_palace)
+				{
+					pair_int = pair.get_card().get_rank().get_int_value();
+					if (pair_int < smallest_rank)
+					{
+						smallest_pair = pair;
+						smallest_rank = pair_int;
+					}
+				}
+
+				game.sendAction(new PalaceSelectCardAction(this, smallest_pair));
+				return;
+			}
 		}
 	}//END: receiveInfo() method
 }//END: PalaceComputerPlayerSmartAI class

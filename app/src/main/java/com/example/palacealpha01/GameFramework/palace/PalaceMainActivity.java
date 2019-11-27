@@ -37,12 +37,16 @@ public class PalaceMainActivity extends GameMainActivity implements View.OnClick
 
 		playerTypes.add(new GamePlayerType("Computer Player (dumb)")
 		{
-			public GamePlayer createPlayer(String name)
+/*			public GamePlayer createPlayer(String name)
 			{
 				return new PalaceComputerPlayerRandomAI(name);
 			}
+*/			public GamePlayer createPlayer(String name)
+			{
+				return new PalaceComputerPlayerSmartAI(name);
+			}
 		});
-		// Create a game configuration class for Tic-tac-toe
+
 		GameConfig defaultConfig = new GameConfig(playerTypes, 2, 2, "Palace", PORT_NUMBER);
 
 		defaultConfig.addPlayer("Human", 0);

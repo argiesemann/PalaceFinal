@@ -248,8 +248,8 @@ public class PalaceSurfaceView extends SurfaceView
 		for (Pair p : pgs.the_deck)
 		{
 			if (p.get_location() == Location.PLAYER_ONE_HAND && pgs.getSelectedCards().contains(p) ||
-					p.get_location() == Location.PLAYER_ONE_UPPER_PALACE && pgs.getSelectedCards().contains(p) ||
-					p.get_location() == Location.PLAYER_ONE_LOWER_PALACE && pgs.getSelectedCards().contains(p))
+				p.get_location() == Location.PLAYER_ONE_UPPER_PALACE && pgs.getSelectedCards().contains(p) ||
+				p.get_location() == Location.PLAYER_ONE_LOWER_PALACE && pgs.getSelectedCards().contains(p))
 			{
 				canvas.drawText("card " + p.toString() + "is selected", 100, 100, recPaint);
 			}
@@ -276,7 +276,8 @@ public class PalaceSurfaceView extends SurfaceView
 				if (localHumanPlayer.getPlayerNum() == 0) {
 					canvas.drawBitmap(pictures.get(p.get_card().toString()), xP1H, yP1H, bitmapPaint);
 				}
-				else {
+				else
+				{
 					canvas.drawBitmap(cardBack, xP1H, yP1H, bitmapPaint);
 				}
 				p.setX(xP1H);
@@ -294,7 +295,8 @@ public class PalaceSurfaceView extends SurfaceView
 					if (localHumanPlayer.getPlayerNum() == 0) {
 						canvas.drawBitmap(pictures.get(playerOneHand.get(i).get_card().toString()), xP1H, yP1H, bitmapPaint);
 					}
-					else {
+					else
+					{
 						canvas.drawBitmap(cardBack, xP1H, yP1H, bitmapPaint);
 					}
 					playerOneHand.get(i).setX(xP1H);
@@ -314,7 +316,8 @@ public class PalaceSurfaceView extends SurfaceView
 				if (localHumanPlayer.getPlayerNum() == 1) {
 					canvas.drawBitmap(pictures.get(p.get_card().toString()), xP2H, yP2H, bitmapPaint);
 				}
-				else {
+				else
+				{
 					canvas.drawBitmap(cardBack, xP2H, yP2H, bitmapPaint);
 				}
 				p.setX(xP2H);
@@ -332,7 +335,8 @@ public class PalaceSurfaceView extends SurfaceView
 				if (localHumanPlayer.getPlayerNum() == 1) {
 					canvas.drawBitmap(pictures.get(playerTwoHand.get(i).get_card().toString()), xP2H, yP2H, bitmapPaint);
 				}
-				else {
+				else
+				{
 					canvas.drawBitmap(cardBack, xP2H, yP2H, bitmapPaint);
 				}
 				playerTwoHand.get(i).setX(xP2H);

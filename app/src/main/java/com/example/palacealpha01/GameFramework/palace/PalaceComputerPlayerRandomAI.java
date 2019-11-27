@@ -67,37 +67,37 @@ public class PalaceComputerPlayerRandomAI extends GameComputerPlayer
 				//game.sendAction(new PalaceSkipTurn(this));
 
 				//used for temporarily storing the cards in computer player's hand and palace
-				ArrayList<Pair> player_two_hand = new ArrayList<>();
+				ArrayList<Pair> my_hand = new ArrayList<>();
 				//stores the legal cards, if there are any, if the size of this array is 0,
 				//then computer player picks up the discard pile
 				ArrayList<Pair> legalCards = new ArrayList<>();
 
-				//if there are any cards in computer player's hand, add them to player_two_hand
+				//if there are any cards in computer player's hand, add them to my_hand
 				for (Pair p : pgs.the_deck)
 					if (p.get_location() == handLoc)
 					{
-						player_two_hand.add(p);
+						my_hand.add(p);
 						//if any of these cards are legal, add them to legalCards arraylist.
 						if(pgs.isLegal(p)){
 							legalCards.add(p);
 						}
 					}
 				//repeats above procedure on upper palace cards, if computer's hand is empty
-				if (player_two_hand.size() == 0)
+				if (my_hand.size() == 0)
 					for (Pair p : pgs.the_deck)
 						if (p.get_location() == upLoc)
 						{
-							player_two_hand.add(p);
+							my_hand.add(p);
 							if(pgs.isLegal(p)){
 								legalCards.add(p);
 							}
 						}
 				//repeats above process on lower palace cards if computer's hand and upper palace is empty
-				if (player_two_hand.size() == 0)
+				if (my_hand.size() == 0)
 					for (Pair p : pgs.the_deck)
 						if (p.get_location() == lowLoc)
 						{
-							player_two_hand.add(p);
+							my_hand.add(p);
 							if(pgs.isLegal(p)){
 								legalCards.add(p);
 							}
@@ -111,9 +111,9 @@ public class PalaceComputerPlayerRandomAI extends GameComputerPlayer
 					sleep(2);
 					game.sendAction(new PalaceTakeDiscardPileAction(this));
 				}
-				else if (player_two_hand.size() > 0)
+				else if (my_hand.size() > 0)
 				{
-					Pair selected_pair = player_two_hand.get((int) (Math.random() * player_two_hand.size()));
+					Pair selected_pair = my_hand.get((int) (Math.random() * my_hand.size()));
 					game.sendAction(new PalaceSelectCardAction(this, selected_pair));
 					return;
 				}
