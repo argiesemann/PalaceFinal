@@ -5,6 +5,8 @@ package com.example.palacealpha01.GameFramework.palace;
 
 import android.util.Log;
 
+import java.io.Serializable;
+
 /**
  * @author Maximilian
  * @author Andres Giesemann
@@ -12,7 +14,7 @@ import android.util.Log;
  * This class combines both a card object and a location enumeration to create a pair object. These
  * pair objects simply represent the both a card and where it is in the game.
  */
-public class Pair
+public class Pair implements Serializable
 {
 	private Card card;
 	private Location location;

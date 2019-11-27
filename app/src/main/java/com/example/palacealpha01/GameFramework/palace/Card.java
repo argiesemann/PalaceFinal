@@ -11,6 +11,8 @@ import android.graphics.drawable.BitmapDrawable;
 */
 import android.util.Log;
 
+import java.io.Serializable;
+
 /**
  * @author Maximilian
  * <p>
@@ -21,7 +23,7 @@ import android.util.Log;
  * object is representing, and a draw() method, which will allow the a card object to draw itself using
  * the BitmagImage it is linked with.
  */
-public class Card
+public class Card implements Serializable
 {
 	private Suit suit;
 	private Rank rank;

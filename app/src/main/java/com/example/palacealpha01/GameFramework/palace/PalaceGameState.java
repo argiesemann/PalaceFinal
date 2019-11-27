@@ -8,6 +8,7 @@ import android.util.Log;
 import com.example.palacealpha01.GameFramework.infoMessage.GameState;
 //import com.example.palacealpha01.R;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 
@@ -22,7 +23,7 @@ import static com.example.palacealpha01.GameFramework.palace.PalaceSurfaceView.c
  *
  * @author Andres Giesemann, Fredrik Olsson, Meredith Marcinko, Maximilian Puglielli
  */
-public class PalaceGameState extends GameState
+public class PalaceGameState extends GameState implements Serializable
 {
 
 
@@ -37,7 +38,7 @@ public class PalaceGameState extends GameState
 	private boolean p1CanChangePalace;
 	private boolean p2CanChangePalace;
 	private boolean testingP1Palace = false; //change this for debugging issues with playing cards from player one's lower palace
-
+	private static final long serialVersionUID = 7552321013488624386L;
 
 
 	/**
@@ -533,16 +534,16 @@ public class PalaceGameState extends GameState
 			for (int i = 0; i < 52; i++) {
 
 				if (i < 3) {
-					the_deck.get(i).set_location(Location.PLAYER_TWO_LOWER_PALACE);
-				}
-				else if (i < 6) {
 					the_deck.get(i).set_location(Location.PLAYER_ONE_LOWER_PALACE);
 				}
+				else if (i < 6) {
+					the_deck.get(i).set_location(Location.PLAYER_TWO_LOWER_PALACE);
+				}
 				else if (i < 9) {
-					the_deck.get(i).set_location(Location.PLAYER_ONE_UPPER_PALACE);
+					the_deck.get(i).set_location(Location.PLAYER_TWO_UPPER_PALACE);
 				}
 				else {
-					the_deck.get(i).set_location(Location.PLAYER_ONE_HAND);
+					the_deck.get(i).set_location(Location.PLAYER_TWO_HAND);
 				}
 			}
 		}

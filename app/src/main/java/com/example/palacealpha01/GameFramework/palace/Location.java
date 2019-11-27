@@ -3,13 +3,15 @@
  */
 package com.example.palacealpha01.GameFramework.palace;
 
+import java.io.Serializable;
+
 /**
  * @author Maximilian
  * <p>
  * This class is an enumeration for the Pair.java class. It represents a card object's location in the
  * game.
  */
-public enum Location
+public enum Location implements Serializable
 {
 	PLAYER_ONE_HAND,
 	PLAYER_ONE_UPPER_PALACE,

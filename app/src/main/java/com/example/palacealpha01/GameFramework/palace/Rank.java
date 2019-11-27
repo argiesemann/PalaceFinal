@@ -5,6 +5,8 @@ package com.example.palacealpha01.GameFramework.palace;
 
 import android.util.Log;
 
+import java.io.Serializable;
+
 /**
  * @author Maximilian
  * <p>
@@ -13,7 +15,7 @@ import android.util.Log;
  * is higher in rank than another card. TWO & TEN have integer values unequal to their number value,
  * because they are wild cards, making them the highest ranked in the game.
  */
-public enum Rank
+public enum Rank implements Serializable
 {
 	THREE(3),
 	FOUR(4),

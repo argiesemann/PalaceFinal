@@ -5,6 +5,8 @@ package com.example.palacealpha01.GameFramework.palace;
 
 import android.util.Log;
 
+import java.io.Serializable;
+
 /**
  * @author Maximilian
  * <p>
@@ -13,7 +15,7 @@ import android.util.Log;
  * us to create the PalaceGameState deck of cards using nexted for loops (see "initialize_the_deck()" in
  * PalaceGameState.java for an example).
  */
-public enum Suit
+public enum Suit implements Serializable
 {
 	SPADES(1), CLUBS(2), DIAMONDS(3), HEARTS(4);
 
