@@ -1,4 +1,35 @@
 <resources>
     <string name="app_name">Tic-Tac-Toe</string>
     <string name="hello_world">Hello world!</string>
+    <string name="manual_text">
+        \n
+        \n
+        <b><u>Welcome to Palace! The object of the game is to get rid of all your cards. The first player to do so is the winner!!!</u></b>\n
+        \n
+        <b>Begin play by setting your Palace cards. These are the cards at the edge of the screen.</b>\n
+        \n
+            \t--Tap the CHANGE PALACE button. Your top Palace cards will appear in your hand. Select the three cards (by tapping) that you want in your top Palace.\n
+            \t--When you have your three cards selected, tap CONFIRM PALACE.\n
+        \n
+        <b>With your Palace chosen, it is time to start playing cards, first from your hand.</b> \n
+        \n
+            \t--Swipe up on the card that you wish to play.​\n
+            \t--If you want to play multiple cards (they must be of the same rank), then tap the cards you want. \n
+            \t--They will get a yellow outline when selected. Swipe up on one of those selected cards or tap PLAY CARD to play them.​ \n
+            \t--If you have no legal cards, then tap the discard pile to pick it up. \n
+            \t--If your hand gets too big for the screen, then tap the LEFT and RIGHT buttons to scroll through your hand. \n
+        \n
+        <b>After you empty your hand, it is time to play from your top Palace. When that is empty, play from your bottom Palace.</b>\n
+        \n
+        <b>Rules of play</b> \n
+        \n
+            \t--You can only make a move when the turn indicator is visible. \n
+            \t--Cards can only be played if they are of higher rank than the card on top of the discard pile.\n
+            \t--Aces are high and there are a few special cards: \n
+            \n
+                \t\t\t--Twos can be played at any time and any card can be played on top of them. \n
+                \t\t\t--Tens can also be played at any time and they will bomb the discard pile (remove all discard pile cards from play). \n
+                    \t\t\t\t--Note: the discard pile is also bombed when the top four cards are of the same rank. \n
+                \t\t\t--Sevens obey normal rules, but only cards of lower rank can be played on top of them. \n
+    </string>
 </resources>

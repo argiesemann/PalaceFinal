@@ -23,7 +23,7 @@ import java.util.HashMap;
 import java.util.Hashtable;
 
 
-
+//TODO set a nicer looking turn indicator and background
 /**
  * PalaceSurfaceView Class:
  * the user interface visuals are implemented in this class
@@ -88,6 +88,7 @@ public class PalaceSurfaceView extends SurfaceView
 				playerTwoHand.add(p);
 			}
 		}
+		bitmapPaint.setColor(Color.GREEN);
 
 
 	}//PalaceSurfaceView
@@ -180,6 +181,10 @@ public class PalaceSurfaceView extends SurfaceView
 		if (!pgs.isDrawPileEmpty())
 		{
 			canvas.drawBitmap(cardBack, getWidth() / 2 + cardWidth, getHeight() / 2 - 3 * (cardHeight / 4), bitmapPaint);
+		}
+
+		if (localHumanPlayer.getPlayerNum() == pgs.getTurn()) {
+			canvas.drawRect(0,0,100,100, bitmapPaint);
 		}
 	}//onDraw
 
