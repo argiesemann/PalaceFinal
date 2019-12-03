@@ -245,7 +245,7 @@ public class PalaceSurfaceView extends SurfaceView
 		int xP2H = 0;
 		int yP2H = getHeight() / 2 - 2 * (cardHeight);
 
-		for (Pair p : pgs.the_deck)
+		/*for (Pair p : pgs.the_deck)
 		{
 			if (p.get_location() == Location.PLAYER_ONE_HAND && pgs.getSelectedCards().contains(p) ||
 				p.get_location() == Location.PLAYER_ONE_UPPER_PALACE && pgs.getSelectedCards().contains(p) ||
@@ -253,7 +253,7 @@ public class PalaceSurfaceView extends SurfaceView
 			{
 				canvas.drawText("card " + p.toString() + "is selected", 100, 100, recPaint);
 			}
-		}
+		}*/
 
 		playerOneHand.clear();
 		playerTwoHand.clear();

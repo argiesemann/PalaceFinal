@@ -171,6 +171,9 @@ public class PalaceLocalGame extends LocalGame
 		{
 			return false;
 		}
+
+		pgs.setWasBombed(false);
+
 		//if action is a selectCardAction, perform this action
 		if (action instanceof PalaceSelectCardAction)
 		{

@@ -37,6 +37,7 @@ public class PalaceGameState extends GameState implements Serializable
 	private boolean isChangingPalace;
 	private boolean p1CanChangePalace;
 	private boolean p2CanChangePalace;
+	private boolean discardPileWasBombed;
 	private boolean testingP1Palace = false; //change this for debugging issues with playing cards from player one's lower palace
 	private static final long serialVersionUID = 7552321013488624386L;
 
@@ -59,6 +60,7 @@ public class PalaceGameState extends GameState implements Serializable
 		isChangingPalace = false;
 		p1CanChangePalace = true;
 		p2CanChangePalace = true;
+		discardPileWasBombed = false;
 	}//constructor
 
 	/**
@@ -93,6 +95,7 @@ public class PalaceGameState extends GameState implements Serializable
 		isChangingPalace = state.getIsChangingPalace();
 		p1CanChangePalace = state.getP1CanChangePalace();
 		p2CanChangePalace = state.getP2CanChangePalace();
+		discardPileWasBombed = state.getWasBombed();
 
 	}//deep copy constructor
 
@@ -610,6 +613,7 @@ public class PalaceGameState extends GameState implements Serializable
 				Log.i("discard", "card" + p.toString() + "was bombed");
 			}
 		}
+		discardPileWasBombed = true;
 	}//bombDiscardPile
 
 	/**
@@ -768,6 +772,14 @@ public class PalaceGameState extends GameState implements Serializable
 			}
 		}
 		return counter;
+	}
+
+	public boolean getWasBombed() {
+		return discardPileWasBombed;
+	}
+
+	public void setWasBombed(boolean b) {
+		discardPileWasBombed = b;
 	}
 
 

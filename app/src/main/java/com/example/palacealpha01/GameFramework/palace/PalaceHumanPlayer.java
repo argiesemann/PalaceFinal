@@ -41,6 +41,7 @@ public class PalaceHumanPlayer extends GameHumanPlayer implements View.OnClickLi
 	private Hashtable<String, Bitmap> pictures = new Hashtable<>();
 	private PalaceGameState pgs;
 	private Toast toast;
+	private Toast toastBomb;
 
     private Pair tappedCard;
     private int lastTapX;
@@ -214,6 +215,9 @@ public class PalaceHumanPlayer extends GameHumanPlayer implements View.OnClickLi
 		{
 			palaceSurfaceView.setPgs((PalaceGameState) info);
 			pgs = (PalaceGameState) info;
+			if (pgs.getWasBombed()) {
+				toastBomb.show();
+			}
 			palaceSurfaceView.invalidate();
 		}
 
@@ -252,6 +256,7 @@ public class PalaceHumanPlayer extends GameHumanPlayer implements View.OnClickLi
 		palaceSurfaceView.setActivity(myActivity);
 
 		toast = Toast.makeText(myActivity.getApplicationContext(), "You can no longer change your palace!", Toast.LENGTH_SHORT);
+		toastBomb = Toast.makeText(myActivity.getApplicationContext(), "Discard pile was BOMBED", Toast.LENGTH_SHORT);
 	}
 
 	/**
