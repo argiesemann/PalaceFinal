@@ -8,22 +8,17 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.util.AttributeSet;
-import android.util.Log;
-import android.view.MotionEvent;
 import android.view.SurfaceView;
-import android.view.View;
 
 import com.example.palacealpha01.GameFramework.Game;
 import com.example.palacealpha01.GameFramework.GamePlayer;
-import com.example.palacealpha01.GameFramework.utilities.Logger;
 
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Hashtable;
 
 
-//TODO set a nicer looking turn indicator and background
+//TODO purple cardback?
 /**
  * PalaceSurfaceView Class:
  * the user interface visuals are implemented in this class
@@ -40,8 +35,10 @@ public class PalaceSurfaceView extends SurfaceView
 	private PalaceGameState pgs;
 
 	private Paint bitmapPaint = new Paint();
+	private Paint backgroundPaint = new Paint();
 	private Paint selectCardPaint = new Paint();
 	private Bitmap cardBack = BitmapFactory.decodeResource(getResources(), R.drawable.back);
+	private Bitmap turnIndicator = BitmapFactory.decodeResource(getResources(), R.drawable.pilot_turnlight);
 	public static final int cardWidth = 108;
 	public static final int cardHeight = 150;
 
@@ -88,7 +85,8 @@ public class PalaceSurfaceView extends SurfaceView
 				playerTwoHand.add(p);
 			}
 		}
-		bitmapPaint.setColor(Color.GREEN);
+		bitmapPaint.setColor(0xFF793ab0);
+		backgroundPaint.setColor(Color.GRAY);
 
 
 	}//PalaceSurfaceView
@@ -147,6 +145,8 @@ public class PalaceSurfaceView extends SurfaceView
 		{
 			return;
 		}
+		canvas.drawRect(0,0,getWidth(),getHeight(),backgroundPaint);
+
 		drawPlayerOnePalaces(canvas); //done
 
 		drawHands(canvas);//done
@@ -184,7 +184,14 @@ public class PalaceSurfaceView extends SurfaceView
 		}
 
 		if (localHumanPlayer.getPlayerNum() == pgs.getTurn()) {
-			canvas.drawRect(0,0,100,100, bitmapPaint);
+			//canvas.drawRect(getWidth()/3,getHeight()/2 - 100,getWidth()/3 + 100,getHeight()/2 , bitmapPaint);
+			//canvas.drawOval(getWidth()/4,getHeight()/2 - 80,getWidth()/4 + 100,getHeight()/2 + 20 , bitmapPaint);
+			if (localHumanPlayer.getPlayerNum() == 1) {
+				canvas.drawBitmap(turnIndicator, getWidth() / 3, getHeight() / 2 - 120, bitmapPaint);
+			}
+			else {
+				canvas.drawBitmap(turnIndicator, getWidth() / 3, getHeight() / 2 - 100, bitmapPaint);
+			}
 		}
 	}//onDraw
 
