@@ -22,7 +22,7 @@ public class Stack implements Serializable
 	 * class is essentially a linked list where the nodes are always prepended at the head of the list.
 	 * Therefore, a node class was needed.
 	 */
-	private class StackNode
+	private class StackNode implements Serializable
 	{
 		private Pair data;
 		private StackNode next;
