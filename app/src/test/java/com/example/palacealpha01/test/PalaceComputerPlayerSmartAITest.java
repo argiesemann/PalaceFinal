@@ -1,43 +1,30 @@
-/**
- * @formatter:off
- */
-package com.example.palacealpha01.GameFramework.palace;
+package com.example.palacealpha01.test;
 
-import com.example.palacealpha01.GameFramework.GameComputerPlayer;
-import com.example.palacealpha01.GameFramework.infoMessage.GameInfo;
 import com.example.palacealpha01.GameFramework.infoMessage.NotYourTurnInfo;
+import com.example.palacealpha01.GameFramework.palace.Location;
+import com.example.palacealpha01.GameFramework.palace.Pair;
+import com.example.palacealpha01.GameFramework.palace.PalaceGameState;
+import com.example.palacealpha01.GameFramework.palace.PalacePlayCardAction;
+import com.example.palacealpha01.GameFramework.palace.PalaceSelectCardAction;
+import com.example.palacealpha01.GameFramework.palace.PalaceTakeDiscardPileAction;
+
+import org.junit.Test;
 
 import java.util.ArrayList;
 
 import static com.example.palacealpha01.GameFramework.palace.Rank.QUEEN_INT;
 import static com.example.palacealpha01.GameFramework.palace.Rank.TEN_INT;
+import static org.junit.Assert.*;
 
-/**
- * @author Maximilian
- */
-public class PalaceComputerPlayerSmartAI extends GameComputerPlayer
+public class PalaceComputerPlayerSmartAITest
 {
-	private Location my_hand;
-	private Location my_upper_palace;
-	private Location my_lower_palace;
-	private boolean are_locations_set;
 
-	/**
-	 *
-	 * @param name
-	 */
-	public PalaceComputerPlayerSmartAI(String name)
+	@Test
+	public void receiveInfo_test()
 	{
-		super(name);
-		this.are_locations_set = false;
-	}//END: PalaceComputerPlayerSmartAI() constructor
+	}
 
-	/**
-	 *
-	 * @param info
-	 */
-	@Override
-	protected void receiveInfo(GameInfo info)
+/*	public int[] receiveInfo()
 	{
 		if (! this.are_locations_set)
 		{
@@ -60,7 +47,7 @@ public class PalaceComputerPlayerSmartAI extends GameComputerPlayer
 			return;
 
 		if (info instanceof PalaceGameState &&
-			((PalaceGameState) info).getTurn() == this.playerNum)
+				((PalaceGameState) info).getTurn() == this.playerNum)
 		{
 			info.setGame(game);
 			PalaceGameState pgs = (PalaceGameState) info;
@@ -110,7 +97,7 @@ public class PalaceComputerPlayerSmartAI extends GameComputerPlayer
 			// but none are playable,
 			//		then take the discard pile
 			if (has_hand         && legal_hand.size()         == 0 ||
-				has_upper_palace && legal_upper_palace.size() == 0)
+					has_upper_palace && legal_upper_palace.size() == 0)
 			{
 				sleep(2);
 				game.sendAction(new PalaceTakeDiscardPileAction(this));
@@ -120,7 +107,7 @@ public class PalaceComputerPlayerSmartAI extends GameComputerPlayer
 			// if we don't have cards in neither our hand, nor our upper palace,
 			//		then randomly select are card from our lower palace
 			if (! has_hand         &&
-				! has_upper_palace)
+					! has_upper_palace)
 			{
 				game.sendAction(new PalaceSelectCardAction(this,
 						lower_palace.get((int) (Math.random() * lower_palace.size()))));
@@ -194,5 +181,6 @@ public class PalaceComputerPlayerSmartAI extends GameComputerPlayer
 						game.sendAction(new PalaceSelectCardAction(this, pair));
 			}
 		}
-	}//END: receiveInfo() method
-}//END: PalaceComputerPlayerSmartAI class
+	}
+*/
+}

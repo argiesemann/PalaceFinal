@@ -35,17 +35,23 @@ public class PalaceMainActivity extends GameMainActivity implements View.OnClick
 			}
 		});
 
-		playerTypes.add(new GamePlayerType("Computer Player (dumb)")
+		playerTypes.add(new GamePlayerType("Computer Player (Random)")
 		{
-/*			public GamePlayer createPlayer(String name)
+			public GamePlayer createPlayer(String name)
 			{
 				return new PalaceComputerPlayerRandomAI(name);
 			}
-*/			public GamePlayer createPlayer(String name)
+		});
+
+		playerTypes.add(new GamePlayerType("Computer Player (Smart)")
+		{
+			public GamePlayer createPlayer(String name)
 			{
 				return new PalaceComputerPlayerSmartAI(name);
 			}
 		});
+
+
 
 		GameConfig defaultConfig = new GameConfig(playerTypes, 2, 2, "Palace", PORT_NUMBER);
 
