@@ -32,7 +32,7 @@ public class PalaceComputerPlayerRandomAI extends GameComputerPlayer
 	}//PalaceComputerPlayerRandomAI
 
 	/**
-	 *receiveInfo method:
+	 * receiveInfo method:
 	 *
 	 * @param info
 	 */
