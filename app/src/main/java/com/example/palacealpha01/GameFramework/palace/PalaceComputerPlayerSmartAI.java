@@ -9,6 +9,7 @@ import com.example.palacealpha01.GameFramework.infoMessage.NotYourTurnInfo;
 
 import java.util.ArrayList;
 
+import static com.example.palacealpha01.GameFramework.palace.Rank.QUEEN_INT;
 import static com.example.palacealpha01.GameFramework.palace.Rank.TEN_INT;
 
 /**
@@ -141,8 +142,23 @@ public class PalaceComputerPlayerSmartAI extends GameComputerPlayer
 					}
 				}
 
-				game.sendAction(new PalaceSelectCardAction(this, smallest_pair));
-				return;
+				// if the smallest card is a Queen or Higher,
+				// 		then play it
+				if (smallest_rank >= QUEEN_INT)
+				{
+					game.sendAction(new PalaceSelectCardAction(this, smallest_pair));
+					return;
+				}
+
+				Pair[] cards_to_be_selected = new Pair[4];
+				int ind = 0;
+				for (Pair pair : legal_hand)
+					if (pair.get_card().get_rank().get_int_value() == smallest_rank)
+						cards_to_be_selected[ind++] = pair;
+
+				for (Pair pair : cards_to_be_selected)
+					if (pair != null)
+						game.sendAction(new PalaceSelectCardAction(this, pair));
 			}
 			else
 			{
@@ -159,8 +175,23 @@ public class PalaceComputerPlayerSmartAI extends GameComputerPlayer
 					}
 				}
 
-				game.sendAction(new PalaceSelectCardAction(this, smallest_pair));
-				return;
+				// if the smallest card is a Queen or Higher,
+				// 		then play it
+				if (smallest_rank >= QUEEN_INT)
+				{
+					game.sendAction(new PalaceSelectCardAction(this, smallest_pair));
+					return;
+				}
+
+				Pair[] cards_to_be_selected = new Pair[3];
+				int ind = 0;
+				for (Pair pair : legal_upper_palace)
+					if (pair.get_card().get_rank().get_int_value() == smallest_rank)
+						cards_to_be_selected[ind++] = pair;
+
+				for (Pair pair : cards_to_be_selected)
+					if (pair != null)
+						game.sendAction(new PalaceSelectCardAction(this, pair));
 			}
 		}
 	}//END: receiveInfo() method
