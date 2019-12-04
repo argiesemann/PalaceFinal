@@ -177,7 +177,6 @@ public class PalaceLocalGame extends LocalGame
 		//if action is a selectCardAction, perform this action
 		if (action instanceof PalaceSelectCardAction)
 		{
-
 			if (canMove(playerNum))
 			{
 				Pair pair = ((PalaceSelectCardAction) action).getUserSelectedCard();
