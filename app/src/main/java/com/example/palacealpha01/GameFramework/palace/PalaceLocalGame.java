@@ -208,7 +208,8 @@ public class PalaceLocalGame extends LocalGame
 					pgs.playCards(0);
 
 					//If this playCardAction causes the deck to be bombed, the player still has their turn
-					if (!pgs.discardPile.is_empty()) {
+					if (!pgs.discardPile.is_empty())
+					{
                         pgs.setTurn(1);
                     }
 
@@ -312,17 +313,15 @@ public class PalaceLocalGame extends LocalGame
 				if (pgs.getTurn() == 0)
 				{
 					pgs.playLowerPalaceCard(0, pair);
-					if (pair.get_location() != Location.PLAYER_ONE_LOWER_PALACE) {
+					if (! (this.pgs.discardPile.is_empty() && this.pgs.getPlayerOneHandSize() == 0))
 						pgs.setTurn(1);
-					}
 					return true;
 				}
 				else
 				{
 					pgs.playLowerPalaceCard(1, pair);
-					if (pair.get_location() != Location.PLAYER_TWO_LOWER_PALACE) {
+					if (! (this.pgs.discardPile.is_empty() && this.pgs.getPlayerTwoHandSize() == 0))
 						pgs.setTurn(0);
-					}
 					return true;
 				}
 
