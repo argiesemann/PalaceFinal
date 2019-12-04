@@ -34,7 +34,7 @@ public class PalaceLocalGame extends LocalGame
 	/**
 	 * sendUpdatedStateTo method:
 	 * Notify the given player that its state has changed.
-	 * This should involove sending a GameInfo object to the player.
+	 * This should involve sending a GameInfo object to the player.
 	 *
 	 * @param p
 	 */

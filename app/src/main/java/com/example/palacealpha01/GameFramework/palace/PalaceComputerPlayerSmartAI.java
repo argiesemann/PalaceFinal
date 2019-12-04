@@ -17,8 +17,10 @@ import static com.example.palacealpha01.GameFramework.palace.Location.PLAYER_ONE
 import static com.example.palacealpha01.GameFramework.palace.Location.PLAYER_TWO_HAND;
 import static com.example.palacealpha01.GameFramework.palace.Location.PLAYER_TWO_LOWER_PALACE;
 import static com.example.palacealpha01.GameFramework.palace.Location.PLAYER_TWO_UPPER_PALACE;
-import static com.example.palacealpha01.GameFramework.palace.Rank.JACK_INT;import static com.example.palacealpha01.GameFramework.palace.Rank.QUEEN_INT;
-import static com.example.palacealpha01.GameFramework.palace.Rank.TEN;import static com.example.palacealpha01.GameFramework.palace.Rank.TEN_INT;import static com.example.palacealpha01.GameFramework.palace.Rank.TWO;
+import static com.example.palacealpha01.GameFramework.palace.Rank.JACK_INT;
+import static com.example.palacealpha01.GameFramework.palace.Rank.QUEEN_INT;
+import static com.example.palacealpha01.GameFramework.palace.Rank.SEVEN;
+import static com.example.palacealpha01.GameFramework.palace.Rank.TEN_INT;
 
 /**
  * @author Maximilian
@@ -77,9 +79,6 @@ public class PalaceComputerPlayerSmartAI extends GameComputerPlayer
 			info.setGame(this.game);
 			PalaceGameState pgs = (PalaceGameState) info;
 
-			// TODO LIST:
-			//		implement Smart AI's ability to modify its upper palace at game start
-
 			if (! this.is_palace_built)
 			{
 				if (! this.started_building_palace)
@@ -88,7 +87,7 @@ public class PalaceComputerPlayerSmartAI extends GameComputerPlayer
 					this.started_building_palace = true;
 					return;
 				}
-				
+
 				if (pgs.getSelectedCards().size() > 0)
 				{
 					this.game.sendAction(new PalaceConfirmPalaceAction(this));
@@ -107,10 +106,11 @@ public class PalaceComputerPlayerSmartAI extends GameComputerPlayer
 
 				Pair[] cards_to_be_selected = new Pair[3];
 				{
-					int j = 0;
 					boolean have_wild_card = false;
 					boolean have_high_card = false;
+					boolean have_seven     = false;
 					Rank tmp_rank;
+					int j = 0;
 					for (int i = hand_palace.length - 1; i >= 0 && j < cards_to_be_selected.length; i--)
 					{
 						tmp_rank = hand_palace[i].get_card().get_rank();
@@ -123,6 +123,7 @@ public class PalaceComputerPlayerSmartAI extends GameComputerPlayer
 									cards_to_be_selected[j++] = hand_palace[i];
 									have_wild_card = true;
 									continue;
+								default:
 							}
 						}
 						if (! have_high_card)
@@ -134,17 +135,29 @@ public class PalaceComputerPlayerSmartAI extends GameComputerPlayer
 								case KING:
 								case ACE:
 									cards_to_be_selected[j++] = hand_palace[i];
+									have_wild_card = true;
 									have_high_card = true;
 									continue;
+								default:
 							}
 						}
-						else if (tmp_rank.get_int_value() < JACK_INT)
+						if (! have_seven      &&
+							tmp_rank == SEVEN)
+						{
+							cards_to_be_selected[j++] = hand_palace[i];
+							have_wild_card = true;
+							have_high_card = true;
+							have_seven     = true;
+							continue;
+						}
+						else if (tmp_rank.get_int_value() < JACK_INT &&
+								 tmp_rank != SEVEN)
 							cards_to_be_selected[j++] = hand_palace[i];
 					}
 				}
 
 				for (Pair p : cards_to_be_selected)
-					this.game.sendAction(new PalaceSelectCardAction(this, p));
+					this.game.sendAction(new PalaceSelectPalaceCardAction(this, p));
 
 				return;
 			}
@@ -208,7 +221,31 @@ public class PalaceComputerPlayerSmartAI extends GameComputerPlayer
 
 			if (has_hand)
 			{
-				Pair smallest_pair = null;
+				merge_sort(legal_hand, 0, legal_hand.size() - 1);
+
+				Pair smallest_pair = legal_hand.get(0);
+				this.game.sendAction(new PalaceSelectCardAction(this, smallest_pair));
+
+				if (smallest_pair.get_card().get_rank().get_int_value() >= QUEEN_INT)
+					return;
+
+				for (int i = 1;
+					 i < 4 &&
+					 i < legal_hand.size() &&
+					 legal_hand.get(i).get_card().get_rank() == smallest_pair.get_card().get_rank();
+					 i++)
+					this.game.sendAction(new PalaceSelectCardAction(this, legal_hand.get(i)));
+
+/*				int smallest_cnt = 0;
+				for (int i = 1;
+					 legal_hand.get(i).get_card().get_rank() == smallest_pair.get_card().get_rank() &&
+					 i < legal_hand.size();
+					 i++, smallest_cnt++);
+
+				for (int i = 0; i < smallest_cnt; i++)
+					this.game.sendAction(new PalaceSelectCardAction(this, legal_hand.get(i)));
+*/
+/*				Pair smallest_pair = null;
 				int smallest_rank = TEN_INT + 1;
 				int p_int;
 				for (Pair p : legal_hand)
@@ -238,10 +275,34 @@ public class PalaceComputerPlayerSmartAI extends GameComputerPlayer
 				for (Pair pair : cards_to_be_selected)
 					if (pair != null)
 						this.game.sendAction(new PalaceSelectCardAction(this, pair));
-			}
+*/			}
 			else
 			{
-				Pair smallest_pair = null;
+				merge_sort(legal_upper_palace, 0, legal_upper_palace.size() - 1);
+
+				Pair smallest_pair = legal_upper_palace.get(0);
+				this.game.sendAction(new PalaceSelectCardAction(this, smallest_pair));
+
+				if (smallest_pair.get_card().get_rank().get_int_value() >= QUEEN_INT)
+					return;
+
+				for (int i = 1;
+					 i < 3 &&
+					 i < legal_upper_palace.size() &&
+					 legal_upper_palace.get(i).get_card().get_rank() == smallest_pair.get_card().get_rank();
+					 i++)
+					this.game.sendAction(new PalaceSelectCardAction(this, legal_upper_palace.get(i)));
+
+/*				int smallest_cnt = 0;
+				for (int i = 1;
+					 legal_upper_palace.get(i).get_card().get_rank() == p.get_card().get_rank() &&
+					 i < legal_upper_palace.size();
+					 i++, smallest_cnt++);
+
+				for (int i = 0; i < smallest_cnt; i++)
+					this.game.sendAction(new PalaceSelectCardAction(this, legal_upper_palace.get(i)));
+*/
+/*				Pair smallest_pair = null;
 				int smallest_rank = TEN_INT + 1;
 				int p_int;
 				for (Pair p : legal_upper_palace)
@@ -271,7 +332,7 @@ public class PalaceComputerPlayerSmartAI extends GameComputerPlayer
 				for (Pair p : cards_to_be_selected)
 					if (p != null)
 						this.game.sendAction(new PalaceSelectCardAction(this, p));
-			}
+*/			}
 		}
 	}//END: receiveInfo() method
 
@@ -349,5 +410,68 @@ public class PalaceComputerPlayerSmartAI extends GameComputerPlayer
 		// Copy remaining elements of R[] if any
 		while (j < len_r)
 			arr[k++] = R[j++];
+	}//END: merge() method
+
+	private static void merge_sort(ArrayList<Pair> arr_list, int l, int r)
+	{
+		if (l >= r)
+		{
+			Log.d("SmartAI Class", "ERROR in merge_sort(): 'l' is >= 'r'");
+			return;
+		}
+		if (r >= arr_list.size())
+		{
+			Log.d("SmartAI Class", "ERROR in merge_sort(): 'r' is >= arr.length");
+			return;
+		}
+
+		int m = (l + r) / 2;
+
+		// Split arr in half, via recursive calls
+		merge_sort(arr_list, l, m);
+		merge_sort(arr_list, m + 1, r);
+
+		// Merge halves back together
+		merge(arr_list, l, m, r);
+	}//END: merge_sort() method
+
+	private static void merge(ArrayList<Pair> arr_list, int l, int m, int r)
+	{
+		// Sub-array sizes
+		int len_l = (m - l) + 1;
+		int len_r = r - m;
+
+		// Temp arrays
+		Pair[] L = new Pair[len_l];
+		Pair[] R = new Pair[len_r];
+
+		// Populate temp arrays
+		for (int i = 0; i < len_l; i++)
+			L[i] = arr_list.get(l + i);
+		for (int i = 0; i < len_r; i++)
+			R[i] = arr_list.get((m + 1) + i);
+
+		// Initial indexes
+		int i = 0;	// first sub-array
+		int j = 0;	// second sub-array
+		int k = l;	// merged array
+
+		// Repopulate arr
+		while (i < len_l &&
+			   j < len_r)
+		{
+			if (L[i].get_card().get_rank().get_int_value() <= R[j].get_card().get_rank().get_int_value())
+				arr_list.add(k++, L[i++]);
+			else
+				arr_list.add(k++, R[j++]);
+		}
+
+		// Copy remaining elements of L[] if any
+		while (i < len_l)
+			arr_list.add(k++, L[i++]);
+
+		// Copy remaining elements of R[] if any
+		while (j < len_r)
+			arr_list.add(k++, R[j++]);
 	}//END: merge() method
 }//END: PalaceComputerPlayerSmartAI class

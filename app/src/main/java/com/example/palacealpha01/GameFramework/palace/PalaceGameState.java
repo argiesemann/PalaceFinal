@@ -429,15 +429,11 @@ public class PalaceGameState extends GameState implements Serializable
 		{
 			if (selectedCards.size() == 3)
 			{
-
 				for (Pair p : the_deck)
 				{
-
 					if (p.get_location() == Location.PLAYER_TWO_HAND && selectedCards.contains(p))
 					{
-
 						p.set_location(Location.PLAYER_TWO_UPPER_PALACE);
-
 					}
 				}
 				selectedCards.clear();
