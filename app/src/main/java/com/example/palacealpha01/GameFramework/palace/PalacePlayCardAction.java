@@ -6,7 +6,7 @@ import com.example.palacealpha01.GameFramework.actionMessage.GameAction;
 import java.io.Serializable;
 
 /**
- * An Action in which the player can play their selected card
+ * An Action in which the player can play their selected card(s)
  *
  * @author Andres Giesemann, Fredrik Olsson, Meredith Marcinko, Maximilian Puglielli
  * @version November 2019

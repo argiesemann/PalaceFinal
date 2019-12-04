@@ -12,6 +12,8 @@ import com.example.palacealpha01.GameFramework.gameConfiguration.GamePlayerType;
 import java.util.ArrayList;
 
 /**
+ * PalaceMainActivity Class
+ *
  * @author Andres Giesemann, Fredrik Olsson, Meredith Marcinko, Maximilian Puglielli
  */
 public class PalaceMainActivity extends GameMainActivity implements View.OnClickListener
@@ -53,7 +55,8 @@ public class PalaceMainActivity extends GameMainActivity implements View.OnClick
 
 
 
-		GameConfig defaultConfig = new GameConfig(playerTypes, 2, 2, "Palace", PORT_NUMBER);
+		GameConfig defaultConfig = new GameConfig(playerTypes, 2, 2,
+				"Palace", PORT_NUMBER);
 
 		defaultConfig.addPlayer("Human", 0);
 		defaultConfig.addPlayer("computer", 1);
@@ -73,39 +76,4 @@ public class PalaceMainActivity extends GameMainActivity implements View.OnClick
 		return new PalaceLocalGame();
 	}//createLocalGame
 
-
-
-    /*private CardSurfaceView tableView;
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState)
-    {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-
-        tableView = findViewById(R.id.TableSurfaceView);
-
-        PalaceGameState pgs = new PalaceGameState(getResources());
-        tableView.setPgs(pgs);
-        tableView.setOnTouchListener(tableView);
-
-        Button tester = findViewById(R.id.TestButton);
-        tester.setOnClickListener(this);
-
-
-    }//onCreate
-
-
-    /**
-     * This method listens to a ClickEvent and then
-     * calls all the Use case methods in the PalaceGameState class
-     *
-     * @param view
-     *
-    @Override
-    public void onClick(View view)
-    {
-        tableView.invalidate();
-
-    }//onClick*/
 }//class PalaceMainActivity
