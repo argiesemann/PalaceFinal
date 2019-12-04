@@ -32,14 +32,12 @@ public class PalaceGameState extends GameState implements Serializable
 	public ArrayList<Pair> the_deck;
 	private ArrayList<Pair> selectedCards;
 	public Stack discardPile;
-	private Resources resources;
 	private int turn;
 	private boolean isChangingPalace;
 	private boolean p1CanChangePalace;
 	private boolean p2CanChangePalace;
 	private boolean discardPileWasBombed;
 	private boolean testingP1Palace = false; //change this for debugging issues with playing cards from player one's lower palace
-	private static final long serialVersionUID = 7552321013488624386L;
 
 
 	/**
@@ -49,7 +47,6 @@ public class PalaceGameState extends GameState implements Serializable
 	 */
 	public PalaceGameState()
 	{
-		//this.resources = resources;
 		the_deck = new ArrayList<>();
 		selectedCards = new ArrayList<>();
 		discardPile = new Stack();
@@ -84,12 +81,6 @@ public class PalaceGameState extends GameState implements Serializable
 			selectedCards.add(new Pair(p));
 		}
 
-/*		discardPile = new ArrayList<>();
-		for (Pair p : state.discardPile)
-		{
-			discardPile.add(new Pair(p));
-		}
-*/
 		discardPile = new Stack(state.discardPile);
 
 		isChangingPalace = state.getIsChangingPalace();
@@ -124,7 +115,6 @@ public class PalaceGameState extends GameState implements Serializable
 	 * shuffleTheDeck method:
 	 * Simply shuffles the deck using the shuffle method from Collections
 	 */
-	//function wont be implemented until the arrayList for theDeck is made
 	public void shuffleTheDeck()
 	{
 		Collections.shuffle(the_deck);
@@ -149,7 +139,9 @@ public class PalaceGameState extends GameState implements Serializable
 				return true;
 			}
 			//also select the card if the other selected cards are of the same rank
-			else if (!selectedCards.contains(userSelectedCard) && userSelectedCard.get_card().get_rank() == selectedCards.get(selectedCards.size() - 1).get_card().get_rank())
+			else if (!selectedCards.contains(userSelectedCard)
+					&& userSelectedCard.get_card().get_rank()
+					== selectedCards.get(selectedCards.size() - 1).get_card().get_rank())
 			{
 				selectedCards.add(userSelectedCard);
 				return true;
@@ -196,22 +188,39 @@ public class PalaceGameState extends GameState implements Serializable
 
 	}//selectPalaceCards
 
-	public boolean playLowerPalaceCard(int playerID, Pair userSelectedCard) {
+	/**
+	 * playLowerPalaceCards method:
+	 *
+	 * Plays a lower palace card immediately without selecting it first and automatically
+	 * takes the discard pile if the played card was illegal
+	 *
+	 * @param playerID player who is playing the card
+	 * @param userSelectedCard card that was chosen
+	 * @return true if the card is legal OR if the card was illegal and the discard pile was taken
+	 */
+	public boolean playLowerPalaceCard(int playerID, Pair userSelectedCard)
+	{
 
-		if (isLegal(userSelectedCard)){
+		if (isLegal(userSelectedCard))
+		{
 			selectCards(playerID, userSelectedCard);
 			playCards(playerID);
 			return true;
 		}
 
-		else {
-			if (userSelectedCard.get_location() == Location.PLAYER_ONE_LOWER_PALACE && getPlayerOneHandSize() == 0 && getPlayerOneUpperPalaceSize() == 0) {
+		else
+		{
+			if (userSelectedCard.get_location() == Location.PLAYER_ONE_LOWER_PALACE
+				&& getPlayerOneHandSize() == 0 && getPlayerOneUpperPalaceSize() == 0)
+			{
 				selectedCards.add(userSelectedCard);
 				playCards(playerID);
 				takeDiscardPile(playerID);
 				return true;
 			}
-			else if (userSelectedCard.get_location() == Location.PLAYER_TWO_LOWER_PALACE && getPlayerTwoHandSize() == 0 && getPlayerTwoUpperPalaceSize() == 0) {
+			else if (userSelectedCard.get_location() == Location.PLAYER_TWO_LOWER_PALACE
+					&& getPlayerTwoHandSize() == 0 && getPlayerTwoUpperPalaceSize() == 0)
+			{
 				selectedCards.add(userSelectedCard);
 				playCards(playerID);
 				takeDiscardPile(playerID);
@@ -233,7 +242,8 @@ public class PalaceGameState extends GameState implements Serializable
 	 */
 	public boolean playCards(int playerID)
 	{
-		if (isChangingPalace) {
+		if (isChangingPalace)
+		{
 			return false;
 		}
 		if (selectedCards.size() != 0)
@@ -254,21 +264,14 @@ public class PalaceGameState extends GameState implements Serializable
 
 			selectedCards.clear();
 
-			//bomb the discard pile if there at least 4 cards and the top four are of the same rank
-			if (discardPile.are_next_four_equal() || discardPile.peek().get_card().get_rank() == Rank.TEN)
+			//bomb the discard pile if the top four cards are of the same rank OR if the top card is a ten
+			if (discardPile.are_next_four_equal()
+				|| discardPile.peek().get_card().get_rank() == Rank.TEN)
 			{
 				bombDiscardPile();
 			}
 
 			takeFromDrawPile(playerID);
-		/*	if (discardPile.size() >= 4)
-			{
-				if (discardPile.get(discardPile.size() - 1).get_card().get_rank() == discardPile.get(discardPile.size() - 2).get_card().get_rank() && discardPile.get(discardPile.size() - 1).get_card().get_rank() == discardPile.get(discardPile.size() - 3).get_card().get_rank() && discardPile.get(discardPile.size() - 1).get_card().get_rank() == discardPile.get(discardPile.size() - 4).get_card().get_rank() || discardPile.get(discardPile.size() - 1).get_card().get_rank() == Rank.TEN)
-				{
-					bombDiscardPile();
-				}
-			}*/
-
 
 			if (playerID == 0 && p1CanChangePalace)
 				p1CanChangePalace = false;
@@ -281,7 +284,15 @@ public class PalaceGameState extends GameState implements Serializable
 		return false;
 	}//playCards
 
-	private void takeFromDrawPile(int playerID) {
+	/**
+	 * takeFromDrawPile method:
+	 *
+	 * Moves cards from draw pile into the player's hand when 1) they have fewer than five cards and
+	 * 2) the draw pile is not empty
+	 * @param playerID the player whose hand is getting refilled
+	 */
+	private void takeFromDrawPile(int playerID)
+	{
 
 		int drawPileSize = 0;
 		int handSize = 0;
@@ -358,8 +369,6 @@ public class PalaceGameState extends GameState implements Serializable
 	 */
 	public boolean changePalace(int playerID)
 	{
-		/*An array to store the selected cards in the players
-		 * hand that will be changed with the palacecards*/
 		if (playerID == 0)
 		{
 			if (!p1CanChangePalace) {
@@ -421,7 +430,6 @@ public class PalaceGameState extends GameState implements Serializable
 				}
 				selectedCards.clear();
 				isChangingPalace = false;
-//				p1CanChangePalace = false;
 				return true;
 			}
 		}
@@ -442,7 +450,6 @@ public class PalaceGameState extends GameState implements Serializable
 				}
 				selectedCards.clear();
 				isChangingPalace = false;
-//				p2CanChangePalace = false;
 				return true;
 			}
 		}
@@ -502,7 +509,6 @@ public class PalaceGameState extends GameState implements Serializable
 	 * dealTheDeck method:
 	 * Deals cards from DRAW_PILE to palaces and hands of players
 	 */
-
 	public void dealTheDeck()
 	{
 		if (!testingP1Palace) {
@@ -563,16 +569,20 @@ public class PalaceGameState extends GameState implements Serializable
 	 */
 	public boolean isLegal(Pair selectedCard)
 	{
-		if (selectedCard.get_location() == Location.PLAYER_ONE_UPPER_PALACE && getPlayerOneHandSize() > 0) {
+		if (selectedCard.get_location() == Location.PLAYER_ONE_UPPER_PALACE
+			&& getPlayerOneHandSize() > 0) {
 			return false;
 		}
-		if (selectedCard.get_location() == Location.PLAYER_TWO_UPPER_PALACE && getPlayerTwoHandSize() > 0) {
+		if (selectedCard.get_location() == Location.PLAYER_TWO_UPPER_PALACE
+			&& getPlayerTwoHandSize() > 0) {
 			return false;
 		}
-		if (selectedCard.get_location() == Location.PLAYER_ONE_LOWER_PALACE && (getPlayerOneHandSize() > 0 || getPlayerOneUpperPalaceSize() > 0)) {
+		if (selectedCard.get_location() == Location.PLAYER_ONE_LOWER_PALACE
+			&& (getPlayerOneHandSize() > 0 || getPlayerOneUpperPalaceSize() > 0)) {
 			return false;
 		}
-		if (selectedCard.get_location() == Location.PLAYER_TWO_LOWER_PALACE && (getPlayerTwoHandSize() > 0 || getPlayerTwoUpperPalaceSize() > 0)) {
+		if (selectedCard.get_location() == Location.PLAYER_TWO_LOWER_PALACE
+			&& (getPlayerTwoHandSize() > 0 || getPlayerTwoUpperPalaceSize() > 0)) {
 			return false;
 		}
 		if (discardPile.is_empty())
@@ -580,17 +590,22 @@ public class PalaceGameState extends GameState implements Serializable
 			return true;
 		}
 		//playing a two or a ten or playing on a two is always legal
-		else if (discardPile.peek().get_card().get_rank() == Rank.TWO || selectedCard.get_card().get_rank() == Rank.TWO || selectedCard.get_card().get_rank() == Rank.TEN)
+		else if (discardPile.peek().get_card().get_rank() == Rank.TWO
+				|| selectedCard.get_card().get_rank() == Rank.TWO
+				|| selectedCard.get_card().get_rank() == Rank.TEN)
 		{
 			return true;
 		}
 		//cards of equal or lower rank are allowed on top of sevens
-		else if (discardPile.peek().get_card().get_rank() == Rank.SEVEN && (selectedCard.get_card().get_rank().get_int_value() <= Rank.SEVEN_INT))
+		else if (discardPile.peek().get_card().get_rank() == Rank.SEVEN
+				&& (selectedCard.get_card().get_rank().get_int_value() <= Rank.SEVEN_INT))
 		{
 			return true;
 		}
 		//otherwise, a card is only legal if its rank is higher than the top card of the discard pile
-		else if (discardPile.peek().get_card().get_rank() != Rank.SEVEN && discardPile.peek().get_card().get_rank().get_int_value() <= selectedCard.get_card().get_rank().get_int_value())
+		else if (discardPile.peek().get_card().get_rank() != Rank.SEVEN
+				&& discardPile.peek().get_card().get_rank().get_int_value()
+				<= selectedCard.get_card().get_rank().get_int_value())
 		{
 			return true;
 		}
@@ -603,7 +618,7 @@ public class PalaceGameState extends GameState implements Serializable
 	 * Removes the discardPile from play by moving it to the dead pile.
 	 */
 	private void bombDiscardPile()
-	{//TODO make it clear to the user that the discardPile is getting bombed, instead of just having it disappear
+	{
 		discardPile.clear();
 		for (Pair p : the_deck)
 		{
@@ -697,87 +712,167 @@ public class PalaceGameState extends GameState implements Serializable
 		return gameStateString;
 	}//toString
 
-	public Pair getPairAt(int x, int y, Location lowerPalaceLoc) {
-		//Bitmap cardBack = BitmapFactory.decodeResource(getResources(), R.drawable.back);
-		for (Pair p : the_deck) {
-			if (x > p.getX() && x < p.getX() + cardWidth && y > p.getY() && y < p.getY() + cardHeight) {
-				if (p.get_location() != lowerPalaceLoc) {
+	/**
+	 * getPairAt method:
+	 *
+	 * Finds the Pair object (representing a card) that is located at the coordinate specified by
+	 * parameters x and y and returns it.
+	 *
+	 * @param x x-coord of tap
+	 * @param y y-coord of tap
+	 * @param lowerPalaceLoc location of lower palace (whether it's player one or two)
+	 * @return the Pair at the given location
+	 */
+	public Pair getPairAt(int x, int y, Location lowerPalaceLoc)
+	{
+		for (Pair p : the_deck)
+		{
+			if (x > p.getX() && x < p.getX() + cardWidth
+				&& y > p.getY() && y < p.getY() + cardHeight)
+			{
+				if (p.get_location() != lowerPalaceLoc)
+				{
 					return p;
 				}
 			}
 		}
 
-		for (Pair p : the_deck) {
-			if (x > p.getX() && x < p.getX() + cardWidth && y > p.getY() && y < p.getY() + cardHeight) {
-				if (p.get_location() == lowerPalaceLoc) {
+		for (Pair p : the_deck)
+		{
+			if (x > p.getX() && x < p.getX() + cardWidth
+				&& y > p.getY() && y < p.getY() + cardHeight)
+			{
+				if (p.get_location() == lowerPalaceLoc)
+				{
 					return p;
 				}
 			}
 		}
 
 		Pair discardTop = discardPile.peek();
-		if (discardTop != null && x > discardTop.getX() && x < discardTop.getX() + cardWidth && y > discardTop.getY() && y < discardTop.getY() + cardHeight) {
+		if (discardTop != null && x > discardTop.getX() && x < discardTop.getX() + cardWidth
+			&& y > discardTop.getY() && y < discardTop.getY() + cardHeight)
+		{
 			return discardTop;
 		}
 		return null;
 	}
 
+	/**
+		* getIsChangingPalace method:
+		*
+		* @return truth value of instance variable: isChangingPalace
+	 */
 	public boolean getIsChangingPalace () {
 	 	return isChangingPalace;
 	}
 
+	/**
+	 * getP1CanChangePalace method:
+	 *
+	 * @return truth value of instance variable: p1CanChangePalace
+	 */
 	public boolean getP1CanChangePalace() {
 	 	return p1CanChangePalace;
 	}
 
+	/**
+	 * getP2CanChangePalace method:
+	 *
+	 * @return truth value of instance variable: p2CanChangePalace
+	 */
 	public boolean getP2CanChangePalace() {
 		return p2CanChangePalace;
 	}
 
-	public int getPlayerOneHandSize() {
+	/**
+	 * getPlayerOneHandSize method:
+	 *
+	 * @return number of cards in player one's hand
+	 */
+	public int getPlayerOneHandSize()
+	{
 		int counter = 0;
-		for (Pair p : the_deck) {
-			if (p.get_location() == Location.PLAYER_ONE_HAND) {
+		for (Pair p : the_deck)
+		{
+			if (p.get_location() == Location.PLAYER_ONE_HAND)
+			{
 				counter++;
 			}
 		}
 		return counter;
 	}
 
-	public int getPlayerTwoHandSize() {
+	/**
+	 * getPlayerTwoHandSize method:
+	 *
+	 * @return number of cards in player two's hand
+	 */
+	public int getPlayerTwoHandSize()
+	{
 		int counter = 0;
-		for (Pair p : the_deck) {
-			if (p.get_location() == Location.PLAYER_TWO_HAND) {
+		for (Pair p : the_deck)
+		{
+			if (p.get_location() == Location.PLAYER_TWO_HAND)
+			{
 				counter++;
 			}
 		}
 		return counter;
 	}
 
-	public int getPlayerOneUpperPalaceSize() {
+	/**
+	 * getPlayerOneUpperPalaceSize method:
+	 *
+	 * @return number of cards in player one's upper palace
+	 */
+	public int getPlayerOneUpperPalaceSize()
+	{
 		int counter = 0;
-		for (Pair p : the_deck) {
-			if (p.get_location() == Location.PLAYER_ONE_UPPER_PALACE) {
+		for (Pair p : the_deck)
+		{
+			if (p.get_location() == Location.PLAYER_ONE_UPPER_PALACE)
+			{
 				counter++;
 			}
 		}
 		return counter;
 	}
 
-	public int getPlayerTwoUpperPalaceSize() {
+	/**
+	 * getPlayerTwoUpperPalaceSize method:
+	 *
+	 * @return number of cards in player two's upper palace
+	 */
+	public int getPlayerTwoUpperPalaceSize()
+	{
 		int counter = 0;
-		for (Pair p : the_deck) {
-			if (p.get_location() == Location.PLAYER_TWO_UPPER_PALACE) {
+		for (Pair p : the_deck)
+		{
+			if (p.get_location() == Location.PLAYER_TWO_UPPER_PALACE)
+			{
 				counter++;
 			}
 		}
 		return counter;
 	}
 
-	public boolean getWasBombed() {
+	/**
+	 * getWasBombed method:
+	 *
+	 * @return truth value of instance variable: discardPileWasBombed
+	 */
+	public boolean getWasBombed()
+	{
 		return discardPileWasBombed;
 	}
 
+	/**
+	 * setWasBombed method:
+	 *
+	 * Sets the truth value of instance variable: discardPileWasBombed
+	 * @param b the new boolean value for discardPileWasBombed
+	 */
 	public void setWasBombed(boolean b) {
 		discardPileWasBombed = b;
 	}

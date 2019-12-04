@@ -10,15 +10,13 @@ import java.util.ArrayList;
 
 /**
  * PalaceLocalGame Class
- * Returns the new local GameState
+ * Updates the local GameState by receiving infos from players
  * checks if the game is over
  */
 public class PalaceLocalGame extends LocalGame
 {
 
-	//the game's state
-	protected PalaceGameState pgs;
-	private ArrayList<Pair> selectedCards = new ArrayList<>();
+	private PalaceGameState pgs;
 
 	/**
 	 * Constructor for PalaceLocalGame
@@ -34,7 +32,7 @@ public class PalaceLocalGame extends LocalGame
 	/**
 	 * sendUpdatedStateTo method:
 	 * Notify the given player that its state has changed.
-	 * This should involove sending a GameInfo object to the player.
+	 * This should involve sending a GameInfo object to the player.
 	 *
 	 * @param p
 	 */
@@ -64,7 +62,7 @@ public class PalaceLocalGame extends LocalGame
 
 	/**
 	 * checkIfGameOver method:
-	 * checks the player's/computer's hand, lower palace and upper palacep for cards.
+	 * checks the player's/computer's hand, lower palace and upper palace for cards.
 	 * If no cards are found then the game is over and the player without cards wins.
 	 * @return
 	 */
@@ -73,73 +71,33 @@ public class PalaceLocalGame extends LocalGame
 	{
 		boolean playerOneWin = true;
 		boolean playerTwoWin = true;
-		for (Pair p : pgs.the_deck) {
-			if (p.get_location() == Location.PLAYER_ONE_HAND || p.get_location() == Location.PLAYER_ONE_UPPER_PALACE || p.get_location() == Location.PLAYER_ONE_LOWER_PALACE) {
+		for (Pair p : pgs.the_deck)
+		{
+			if (p.get_location() == Location.PLAYER_ONE_HAND
+				|| p.get_location() == Location.PLAYER_ONE_UPPER_PALACE
+				|| p.get_location() == Location.PLAYER_ONE_LOWER_PALACE)
+			{
 				playerOneWin = false;
 			}
-			else if (p.get_location() == Location.PLAYER_TWO_HAND || p.get_location() == Location.PLAYER_TWO_UPPER_PALACE || p.get_location() == Location.PLAYER_TWO_LOWER_PALACE) {
+			else if (p.get_location() == Location.PLAYER_TWO_HAND
+					|| p.get_location() == Location.PLAYER_TWO_UPPER_PALACE
+					|| p.get_location() == Location.PLAYER_TWO_LOWER_PALACE)
+			{
 				playerTwoWin = false;
 			}
 		}
 
-		if (playerOneWin) {
+		if (playerOneWin)
+		{
 			return playerNames[0] + " is the winner ";
 		}
 
-		if (playerTwoWin) {
+		if (playerTwoWin)
+		{
 			return playerNames[1] + " is the winner ";
 		}
 
 		return null;
-		/*int p0counter = 0;
-		int p1counter = 0;
-
-		for (Pair p : pgs.the_deck)
-		{
-			if (p.get_location() == Location.PLAYER_ONE_LOWER_PALACE)
-			{
-				p0counter++;
-			}
-		}
-
-
-		for (Pair p : pgs.the_deck)
-		{
-			if (p.get_location() == Location.PLAYER_TWO_LOWER_PALACE)
-			{
-				p1counter++;
-			}
-		}
-
-		for (Pair p : pgs.the_deck)
-		{
-			if (p.get_location() == Location.PLAYER_ONE_HAND)
-			{
-				p0counter++;
-			}
-		}
-
-		for (Pair p : pgs.the_deck)
-		{
-			if (p.get_location() == Location.PLAYER_TWO_HAND)
-			{
-				p1counter++;
-			}
-		}
-
-		if (p0counter == 0)
-		{
-			return playerNames[0] + " is the winner ";
-		}
-		else if (p1counter == 0)
-		{
-			return playerNames[1] + " is the winner ";
-		}
-		else
-		{
-
-			return null;
-		} */
 	}//checkIfGameOver
 
 	/**
@@ -147,7 +105,7 @@ public class PalaceLocalGame extends LocalGame
 	 * Makes the move of the player
 	 *
 	 * @param action
-	 * 			The move that the player has sent to the game
+	 * 			The type of move that the player has sent to the game
 	 * @return
 	 *      tells whether the move was a legal one
 	 */
@@ -313,7 +271,8 @@ public class PalaceLocalGame extends LocalGame
 				if (pgs.getTurn() == 0)
 				{
 					pgs.playLowerPalaceCard(0, pair);
-					if (pair.get_location() != Location.PLAYER_ONE_LOWER_PALACE) {
+					if (pair.get_location() != Location.PLAYER_ONE_LOWER_PALACE)
+					{
 						pgs.setTurn(1);
 					}
 					return true;
@@ -321,7 +280,8 @@ public class PalaceLocalGame extends LocalGame
 				else
 				{
 					pgs.playLowerPalaceCard(1, pair);
-					if (pair.get_location() != Location.PLAYER_TWO_LOWER_PALACE) {
+					if (pair.get_location() != Location.PLAYER_TWO_LOWER_PALACE)
+					{
 						pgs.setTurn(0);
 					}
 					return true;

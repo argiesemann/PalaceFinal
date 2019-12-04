@@ -5,6 +5,7 @@ import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.media.MediaPlayer;
 import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
@@ -26,30 +27,33 @@ import java.util.Hashtable;
  * @author Andres Giesemann, Fredrik Olsson, Meredith Marcinko, Maximilian Puglielli
  * @version November 2019
  */
-//needs to handle screen interaction (implement listeners)
 public class PalaceHumanPlayer extends GameHumanPlayer implements View.OnClickListener, View.OnTouchListener
 {
 
-	/**
-	 * Initialize variables
-	 */
 	private Activity myActivity;
 	private PalaceSurfaceView palaceSurfaceView;
+	private PalaceGameState pgs;
+
+	private int layoutId;
+
 	private TextView helpText;
+
 	private Button leftButton;
 	private Button rightButton;
 	private Button playCardButton;
 	private Button palaceButton;
 	private Button confirmPalace;
-	private int layoutId;
+
 	private Location handLoc;
 	private Location upLoc;
 	private Location lowLoc;
+
 	//the pictures are stored in a hashmap and are initialized in the initCardImages-method.
-	private Hashtable<String, Bitmap> pictures = new Hashtable<>();
-	private PalaceGameState pgs;
+	private Hashtable<String, Bitmap> pictures;
+
 	private Toast toast;
 	private Toast toastBomb;
+	private MediaPlayer bomber;
 
     private Pair tappedCard;
     private int lastTapX;
@@ -75,13 +79,15 @@ public class PalaceHumanPlayer extends GameHumanPlayer implements View.OnClickLi
 		lastTapX = 0;
 		lastTapY = 0;
 		tappedCard = null;
+		pictures = new Hashtable<>();
 
 
 	}//PalaceHumanPlayer
 
 	/**
 	 * initCardImages Method:
-	 * the cards are initialed in this class in order to avoid nullpointerexceptions
+	 * the cards are initialized in this class in order to avoid nullpointerexceptions
+	 * Card objects are assigned a bitmap in PalaceSurfaceView
 	 */
 	private void initCardImages()
 	{
@@ -157,20 +163,24 @@ public class PalaceHumanPlayer extends GameHumanPlayer implements View.OnClickLi
 
 	/**
 	 * initAfterReady Method:
-	 * sets up all the buttons and surfaceview
+	 * sets up all the layout elements (buttons, textViews, surfaceView)
 	 */
 	protected void initAfterReady()
 	{
 		leftButton = myActivity.findViewById(R.id.leftButton);
 		leftButton.setOnClickListener(this);
-		if (this.playerNum == 1) {
+		if (this.playerNum == 1)
+		{
 			leftButton.setY(leftButton.getY() - 7*palaceSurfaceView.getHeight()/10);
 		}
+
 		rightButton = myActivity.findViewById(R.id.rightButton);
 		rightButton.setOnClickListener(this);
-		if (this.playerNum == 1) {
+		if (this.playerNum == 1)
+		{
 			rightButton.setY(rightButton.getY() - 7*palaceSurfaceView.getHeight()/10);
 		}
+
 		palaceButton = myActivity.findViewById(R.id.PalaceButton);
 		palaceButton.setOnClickListener(this);
 
@@ -190,6 +200,8 @@ public class PalaceHumanPlayer extends GameHumanPlayer implements View.OnClickLi
 		helpText.setGravity(Gravity.TOP);
 		helpText.setEnabled(false);
 		helpText.setVisibility(View.INVISIBLE);
+
+		bomber = MediaPlayer.create(myActivity.getApplicationContext(), R.raw.bomb_discard_pile_sfx);
 
 		palaceSurfaceView.setGame(game);
 		handLoc = (this.playerNum == 0)? Location.PLAYER_ONE_HAND : Location.PLAYER_TWO_HAND;
@@ -237,8 +249,10 @@ public class PalaceHumanPlayer extends GameHumanPlayer implements View.OnClickLi
 		{
 			palaceSurfaceView.setPgs((PalaceGameState) info);
 			pgs = (PalaceGameState) info;
-			if (pgs.getWasBombed()) {
+			if (pgs.getWasBombed())
+			{
 				toastBomb.show();
+				bomber.start();
 			}
 			palaceSurfaceView.invalidate();
 		}
@@ -266,56 +280,69 @@ public class PalaceHumanPlayer extends GameHumanPlayer implements View.OnClickLi
 		//sets on the listener for the surfaceview
 		palaceSurfaceView.setOnTouchListener(this);
 
-
-
 		//sets up the pictures stored in the hashmap
 		palaceSurfaceView.setPictures(pictures);
-
 
 		palaceSurfaceView.setHumanPlayer(this);
 
 		//  palaceSurfaceView.setHumanPlayer(this);
 		palaceSurfaceView.setActivity(myActivity);
 
-		toast = Toast.makeText(myActivity.getApplicationContext(), "You can no longer change your palace!", Toast.LENGTH_SHORT);
-		toastBomb = Toast.makeText(myActivity.getApplicationContext(), "Discard pile was BOMBED", Toast.LENGTH_SHORT);
+		toast = Toast.makeText(myActivity.getApplicationContext(),
+				"You can no longer change your palace!", Toast.LENGTH_SHORT);
+
+		toastBomb = Toast.makeText(myActivity.getApplicationContext(),
+				"Discard pile was BOMBED", Toast.LENGTH_SHORT);
 	}
 
 	/**
 	 * onClick method:
-	 * the listeners do not need to know about the gameState,
-	 * they are speficially for the human player to use
 	 *
-	 * @param button
+	 * Handles any button presses and takes action depending on which button was pressed
+	 *
+	 * @param button button that was pressed
 	 */
 	@Override
 	public void onClick(View button)
 	{
+		//confirm palace button
 		if (button.getId() == R.id.confirmPalace)
 		{
 			PalaceConfirmPalaceAction confirmPalace = new PalaceConfirmPalaceAction(this);
 			game.sendAction(confirmPalace);
 			button.invalidate();
 		}
+
+		//change palace button
 		else if (button.getId() == R.id.PalaceButton)
 		{
-			if (pgs != null && playerNum == 0 && !pgs.getP1CanChangePalace()) {
+			if (pgs != null && playerNum == 0 && !pgs.getP1CanChangePalace())
+			{
 				toast.show();
 			}
-			else if (pgs != null && playerNum == 1 && !pgs.getP2CanChangePalace()) {
+			else if (pgs != null && playerNum == 1 && !pgs.getP2CanChangePalace())
+			{
 				toast.show();
 			}
 			PalaceChangePalaceAction changePalace = new PalaceChangePalaceAction(this);
 			game.sendAction(changePalace);
 			button.invalidate();
 		}
-		else if(button.getId()== R.id.leftButton){
+
+		//scroll hand left button
+		else if(button.getId()== R.id.leftButton)
+		{
 			palaceSurfaceView.setOffset(-1);
 
 		}
-		else if(button.getId() == R.id.rightButton){
+
+		//scroll hand right button
+		else if(button.getId() == R.id.rightButton)
+		{
 			palaceSurfaceView.setOffset(1);
 		}
+
+		//play card button
 		else if (button.getId() == R.id.playCardButton)
 		{
 			for (Pair p : pgs.getSelectedCards())
@@ -329,8 +356,11 @@ public class PalaceHumanPlayer extends GameHumanPlayer implements View.OnClickLi
 			}
 		}
 
-		else if (button.getId() == R.id.helpButton) {
-			if (helpText.getVisibility() == View.INVISIBLE) {
+		//help button
+		else if (button.getId() == R.id.helpButton)
+		{
+			if (helpText.getVisibility() == View.INVISIBLE)
+			{
 				helpText.setVisibility(View.VISIBLE);
 				leftButton.setEnabled(false);
 				rightButton.setEnabled(false);
@@ -338,7 +368,8 @@ public class PalaceHumanPlayer extends GameHumanPlayer implements View.OnClickLi
 				palaceButton.setEnabled(false);
 				confirmPalace.setEnabled(false);
 			}
-			else if (helpText.getVisibility() == View.VISIBLE) {
+			else if (helpText.getVisibility() == View.VISIBLE)
+			{
 				helpText.setVisibility(View.INVISIBLE);
 				leftButton.setEnabled(true);
 				rightButton.setEnabled(true);
@@ -354,85 +385,108 @@ public class PalaceHumanPlayer extends GameHumanPlayer implements View.OnClickLi
 
 	/**
 	 * onTouch method:
-	 * handles the taps on the different cards
-	 * @param v
-	 * @param event
-	 * @return
+	 *
+	 * handles taps on the surface view
+	 * @param v the view that was tapped (always PalaceSurfaceView)
+	 * @param event type of tap
+	 * @return true if a card was tapped
 	 */
 	@Override
-	public boolean onTouch(View v, MotionEvent event) {
-		if (event.getAction() == MotionEvent.ACTION_DOWN) {
+	public boolean onTouch(View v, MotionEvent event)
+	{
+		if (event.getAction() == MotionEvent.ACTION_DOWN)
+		{
 		    lastTapX = (int) event.getX();
 		    lastTapY = (int) event.getY();
 			tappedCard = pgs.getPairAt(lastTapX, lastTapY, lowLoc);
 			return true;
 		}
 
-		else if (event.getAction() == MotionEvent.ACTION_UP) {
+		else if (event.getAction() == MotionEvent.ACTION_UP)
+		{
 
-            if (tappedCard == null) {
+            if (tappedCard == null)
+            {
                 return false;
             }
 
-            if (tappedCard.get_location() == handLoc) {
-                if (pgs.getIsChangingPalace()) {
+            if (tappedCard.get_location() == handLoc)
+            {
+                if (pgs.getIsChangingPalace())
+                {
                     game.sendAction(new PalaceSelectPalaceCardAction(this, tappedCard));
-                } else {
-                    if (isSwipe(lastTapY, event)) {
-                    	if (pgs.getSelectedCards().isEmpty()) {
+                }
+                else
+				{
+                    if (isSwipe(lastTapY, event))
+                    {
+                    	if (pgs.getSelectedCards().isEmpty())
+                    	{
 							game.sendAction(new PalaceSelectCardAction(this, tappedCard));
 						}
 
 						game.sendAction(new PalacePlayCardAction(this));
                     }
-                    else {
+                    else
+					{
                         game.sendAction(new PalaceSelectCardAction(this, tappedCard));
                     }
                 }
-            } else if (tappedCard.get_location() == upLoc) {
-                /*if (isntSwipe(lastTapY, event)) {
-					if (pgs.getSelectedCards().isEmpty()) {
-						game.sendAction(new PalaceSelectCardAction(this, tappedCard));
-					}
-					if (!pgs.getSelectedCards().isEmpty()) {
-						game.sendAction(new PalacePlayCardAction(this));
-					}
-
-                }
-                else {
-                    game.sendAction(new PalaceSelectCardAction(this, tappedCard));
-                }*/
-				if (isSwipe(lastTapY, event)) {
-					if (pgs.getSelectedCards().isEmpty()) {
+            }
+            else if (tappedCard.get_location() == upLoc)
+            {
+				if (isSwipe(lastTapY, event))
+				{
+					if (pgs.getSelectedCards().isEmpty())
+					{
 						game.sendAction(new PalaceSelectCardAction(this, tappedCard));
 					}
 
 					game.sendAction(new PalacePlayCardAction(this));
 				}
-				else {
+				else
+				{
 					game.sendAction(new PalaceSelectCardAction(this, tappedCard));
 				}
-            } else if (tappedCard.get_location() == lowLoc) {
+            }
+            else if (tappedCard.get_location() == lowLoc)
+            {
                 game.sendAction(new PalacePlayLowerPalaceCardAction(this, tappedCard));
-            } else if (tappedCard.get_location() == Location.DISCARD_PILE) {
+            }
+            else if (tappedCard.get_location() == Location.DISCARD_PILE)
+            {
                 game.sendAction(new PalaceTakeDiscardPileAction(this));
             }
         }
-
-
-
 
 		v.invalidate();
 		return true;
 	}
 
-	private boolean isSwipe(int lastTapY, MotionEvent event) {
-		if (this.playerNum == 0) {
+	/**
+	 * isSwipe method:
+	 *
+	 * determines whether the user swiped the screen by checking the distance between the
+	 * beginning and end of their contact with the screen
+	 *
+	 * @param lastTapY y-coord of the beginning of their touch
+	 * @param event ACTION_UP event from the end of a touch
+	 * @return true if the screen was swiped
+	 */
+	private boolean isSwipe(int lastTapY, MotionEvent event)
+	{
+		if (this.playerNum == 0)
+		{
 			return lastTapY - 50 > event.getY();
 		}
 		return lastTapY + 50 < event.getY();
 	}
 
+	/**
+	 * getPlayerNum method:
+	 *
+	 * @return int value of instance variable: playerNum
+	 */
 	public int getPlayerNum() {
 		return playerNum;
 	}

@@ -18,7 +18,6 @@ import java.util.ArrayList;
 import java.util.Hashtable;
 
 
-//TODO purple cardback?
 /**
  * PalaceSurfaceView Class:
  * the user interface visuals are implemented in this class
@@ -29,26 +28,23 @@ import java.util.Hashtable;
 public class PalaceSurfaceView extends SurfaceView
 {
 
-	/**
-	 * Initialize variables
-	 */
 	private PalaceGameState pgs;
 
-	private Paint bitmapPaint = new Paint();
-	private Paint backgroundPaint = new Paint();
-	private Paint selectCardPaint = new Paint();
-	private Bitmap cardBack = BitmapFactory.decodeResource(getResources(), R.drawable.back);
-	private Bitmap turnIndicator = BitmapFactory.decodeResource(getResources(), R.drawable.pilot_turnlight);
+	private Paint bitmapPaint;
+	private Paint backgroundPaint;
+	private Paint selectCardPaint;
+	private Bitmap cardBack;
+	private Bitmap turnIndicator;
 	public static final int cardWidth = 108;
 	public static final int cardHeight = 150;
 
 
-	ArrayList<Pair> playerOneHand = new ArrayList<>();
-	ArrayList<Pair> playerTwoHand = new ArrayList<>();
+	ArrayList<Pair> playerOneHand;
+	ArrayList<Pair> playerTwoHand;
 	private PalaceHumanPlayer localHumanPlayer;
 	private Game theGame;
 	private Activity myActivity;
-	private Hashtable<String, Bitmap> pictures = new Hashtable<>();
+	private Hashtable<String, Bitmap> pictures;
 	private int offset = 0;
 
 
@@ -74,18 +70,36 @@ public class PalaceSurfaceView extends SurfaceView
 	{
 
 		super(context, attrs);
-		selectCardPaint.setColor(Color.YELLOW);
+
+		bitmapPaint = new Paint();
+		backgroundPaint = new Paint();
+		selectCardPaint = new Paint();
+		cardBack = BitmapFactory.decodeResource(getResources(), R.drawable.back);
+		turnIndicator = BitmapFactory.decodeResource(getResources(), R.drawable.pilot_turnlight);
+
+		playerOneHand = new ArrayList<>();
+		playerTwoHand = new ArrayList<>();
+
+		pictures = new Hashtable<>();
+
 		setWillNotDraw(false);
+
 		this.pgs = new PalaceGameState();
-		for (Pair p : pgs.the_deck) {
-			if (p.get_location() == Location.PLAYER_ONE_HAND) {
+
+		for (Pair p : pgs.the_deck)
+		{
+			if (p.get_location() == Location.PLAYER_ONE_HAND)
+			{
 				playerOneHand.add(p);
 			}
-			else if (p.get_location() == Location.PLAYER_TWO_HAND) {
+			else if (p.get_location() == Location.PLAYER_TWO_HAND)
+			{
 				playerTwoHand.add(p);
 			}
 		}
+
 		bitmapPaint.setColor(0xFF793ab0);
+		selectCardPaint.setColor(Color.YELLOW);
 		backgroundPaint.setColor(Color.GRAY);
 
 
@@ -93,7 +107,7 @@ public class PalaceSurfaceView extends SurfaceView
 
 	/**
 	 * setPictures method:
-	 * palaces the pictures of the cards on the GUI
+	 * places the pictures of the cards on the GUI
 	 * @param map
 	 */
 	public void setPictures(Hashtable<String, Bitmap> map)
@@ -102,8 +116,8 @@ public class PalaceSurfaceView extends SurfaceView
 	}//setPictures
 
 	/**
-	 *setHumanPlayer method:
-	 * gets the human player and displays their hand on the GUI
+	 * setHumanPlayer method:
+	 * sets the localHumanPlayer instance variable
 	 * @param p
 	 */
 	public void setHumanPlayer(GamePlayer p)
@@ -139,57 +153,42 @@ public class PalaceSurfaceView extends SurfaceView
 	public void onDraw(Canvas canvas)
 	{
 
-		//pgs.shuffleTheDeck();
-
 		if (pgs == null)
 		{
 			return;
 		}
+
+		//draw the background first so everything is on top of it
 		canvas.drawRect(0,0,getWidth(),getHeight(),backgroundPaint);
 
-		drawPlayerOnePalaces(canvas); //done
+		drawPlayerOnePalaces(canvas);
 
-		drawHands(canvas);//done
-		//used for seeing if discard pile fills up
-		Paint discardPaint = new Paint();
-		//used for seeing if discard pile fills up
-		discardPaint.setColor(Color.BLUE);
+		drawHands(canvas);
 
+		drawPlayerTwoPalaces(canvas);
 
-		drawPlayerTwoPalaces(canvas);//done
-		//used for seeing if discard pile fills up
-
-/*        int counter = 0;
-        for(int i = pgs.the_deck.size()-1;i>=0;i--)
-        {
-            canvas.drawText("cards in discard pile: " + counter, 200, 10*counter,discardPaint );
-            if(pgs.the_deck.get(i).get_location()==Location.DISCARD_PILE)
-            {
-                canvas.drawBitmap(pictures.get(pgs.the_deck.get(i).get_card().toString()), getWidth() / 2, getHeight() / 2 - 3 * cardHeight / 4, bitmapPaint);
-
-            counter++;
-            }
-        }
-*/
-		if (pgs.discardPile.peek() != null) {
+		if (pgs.discardPile.peek() != null)
+		{
 			int discardX = getWidth() / 2;
 			int discardY = getHeight() / 2 - 3 * cardHeight / 4;
 			canvas.drawBitmap(pictures.get(pgs.discardPile.peek().get_card().toString()), discardX, discardY, bitmapPaint);
 			pgs.discardPile.peek().setX(discardX);
 			pgs.discardPile.peek().setY(discardY);
 		}
+
 		if (!pgs.isDrawPileEmpty())
 		{
 			canvas.drawBitmap(cardBack, getWidth() / 2 + cardWidth, getHeight() / 2 - 3 * (cardHeight / 4), bitmapPaint);
 		}
 
-		if (localHumanPlayer.getPlayerNum() == pgs.getTurn()) {
-			//canvas.drawRect(getWidth()/3,getHeight()/2 - 100,getWidth()/3 + 100,getHeight()/2 , bitmapPaint);
-			//canvas.drawOval(getWidth()/4,getHeight()/2 - 80,getWidth()/4 + 100,getHeight()/2 + 20 , bitmapPaint);
-			if (localHumanPlayer.getPlayerNum() == 1) {
+		if (localHumanPlayer.getPlayerNum() == pgs.getTurn())
+		{
+			if (localHumanPlayer.getPlayerNum() == 1)
+			{
 				canvas.drawBitmap(turnIndicator, getWidth() / 3, getHeight() / 2 - 120, bitmapPaint);
 			}
-			else {
+			else
+			{
 				canvas.drawBitmap(turnIndicator, getWidth() / 3, getHeight() / 2 - 100, bitmapPaint);
 			}
 		}
@@ -257,32 +256,27 @@ public class PalaceSurfaceView extends SurfaceView
 		int xP2H = 0;
 		int yP2H = getHeight() / 2 - 2 * (cardHeight);
 
-		/*for (Pair p : pgs.the_deck)
-		{
-			if (p.get_location() == Location.PLAYER_ONE_HAND && pgs.getSelectedCards().contains(p) ||
-				p.get_location() == Location.PLAYER_ONE_UPPER_PALACE && pgs.getSelectedCards().contains(p) ||
-				p.get_location() == Location.PLAYER_ONE_LOWER_PALACE && pgs.getSelectedCards().contains(p))
-			{
-				canvas.drawText("card " + p.toString() + "is selected", 100, 100, recPaint);
-			}
-		}*/
-
 		playerOneHand.clear();
 		playerTwoHand.clear();
 
 		for (Pair p : pgs.the_deck) {
-			if (p.get_location() == Location.PLAYER_ONE_HAND) {
+			if (p.get_location() == Location.PLAYER_ONE_HAND)
+			{
 				playerOneHand.add(p);
 			}
-			else if (p.get_location() == Location.PLAYER_TWO_HAND) {
+			else if (p.get_location() == Location.PLAYER_TWO_HAND)
+			{
 				playerTwoHand.add(p);
 			}
 		}
 
 		xP1H = (getWidth()/2) - ((playerOneHand.size()*(cardWidth+5))/2);
-		if(xP1H>0) {
-			for (Pair p : playerOneHand) {
-				if (pgs.getSelectedCards().contains(p)) {
+		if(xP1H>0)
+		{
+			for (Pair p : playerOneHand)
+			{
+				if (pgs.getSelectedCards().contains(p))
+				{
 					drawSelectionBox(canvas, xP1H, yP1H);
 				}
 //				if (localHumanPlayer.getPlayerNum() == 0)
@@ -298,11 +292,14 @@ public class PalaceSurfaceView extends SurfaceView
 				xP1H += cardWidth + 5;
 			}
 		}
-		else {
+		else
+		{
 			xP1H = 0;
-			for (int i = offset; i<playerOneHand.size();i++) {
+			for (int i = offset; i<playerOneHand.size();i++)
+			{
 				if (xP1H + cardWidth < getWidth()) {
-					if (pgs.getSelectedCards().contains(playerOneHand.get(i))) {
+					if (pgs.getSelectedCards().contains(playerOneHand.get(i)))
+					{
 						drawSelectionBox(canvas, xP1H, yP1H);
 					}
 //					if (localHumanPlayer.getPlayerNum() == 0)
@@ -321,9 +318,12 @@ public class PalaceSurfaceView extends SurfaceView
 
 		}
 		xP2H = (getWidth()/2) - ((playerTwoHand.size()*(cardWidth+5))/2);
-		if (xP2H > 0) {
-			for (Pair p : playerTwoHand) {
-				if (pgs.getSelectedCards().contains(p)) {
+		if (xP2H > 0)
+		{
+			for (Pair p : playerTwoHand)
+			{
+				if (pgs.getSelectedCards().contains(p))
+				{
 					drawSelectionBox(canvas, xP2H, yP2H);
 				}
 				//canvas.drawBitmap(cardBack, xP2H, yP2H, bitmapPaint);
@@ -340,10 +340,13 @@ public class PalaceSurfaceView extends SurfaceView
 				xP2H += cardWidth + 5;
 			}
 		}
-		else {
+		else
+		{
 			xP2H = 0;
-			for (int i = offset; i < playerTwoHand.size(); i++) {
-				if (pgs.getSelectedCards().contains(playerTwoHand.get(i))) {
+			for (int i = offset; i < playerTwoHand.size(); i++)
+			{
+				if (pgs.getSelectedCards().contains(playerTwoHand.get(i)))
+				{
 					drawSelectionBox(canvas, xP2H, yP2H);
 				}
 				//canvas.drawBitmap(cardBack, xP2H, yP2H, bitmapPaint);
@@ -360,41 +363,18 @@ public class PalaceSurfaceView extends SurfaceView
 				xP2H += cardWidth + 5;
 			}
 		}
-		/*for (Pair p : pgs.the_deck)
-		{
-			if (p.get_location() == Location.PLAYER_ONE_HAND)
-			{
-				if (pgs.getSelectedCards().contains(p))
-				{
-					drawSelectionBox(canvas, xP1H, yP1H);
-				}
-				canvas.drawBitmap(pictures.get(p.get_card().toString()), xP1H, yP1H, bitmapPaint);
-				p.setX(xP1H);
-				p.setY(yP1H);
-				xP1H += cardWidth + 5;
-			}
-		}
-
-		for (Pair p : pgs.the_deck)
-		{
-			if (p.get_location() == Location.PLAYER_TWO_HAND)
-			{
-				if (pgs.getSelectedCards().contains(p))
-				{
-					drawSelectionBox(canvas, xP2H, yP2H);
-				}
-				canvas.drawBitmap(cardBack, xP2H, yP2H, bitmapPaint);
-				p.setX(xP2H);
-				p.setY(yP2H);
-				//canvas.drawBitmap(pictures.get(p.get_card().toString()), xP2H, yP2H, bitmapPaint);
-				xP2H += cardWidth + 5;
-			}
-		}*/
-
 	}
 
-	public void setOffset(int offset){
-		if(this.offset+offset<0){
+	/**
+	 * setOffset method:
+	 *
+	 * sets the offset, which tells the surfaceview which cards to draw from an oversized hand
+	 * @param offset
+	 */
+	public void setOffset(int offset)
+	{
+		if(this.offset+offset<0)
+		{
 			return;
 		}
 		this.offset += offset;
@@ -425,7 +405,6 @@ public class PalaceSurfaceView extends SurfaceView
 					drawSelectionBox(canvas, xP1LP, yP1LP);
 				}
 				canvas.drawBitmap(cardBack, xP1LP, yP1LP, bitmapPaint);
-//				canvas.drawBitmap(pictures.get(p.get_card().toString()), xP1LP, yP1LP, bitmapPaint);
 				p.setX(xP1LP);
 				p.setY(yP1LP);
 				xP1LP += cardWidth + 5;
