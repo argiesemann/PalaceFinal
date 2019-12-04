@@ -378,7 +378,7 @@ public class PalaceHumanPlayer extends GameHumanPlayer implements View.OnClickLi
                 if (pgs.getIsChangingPalace()) {
                     game.sendAction(new PalaceSelectPalaceCardAction(this, tappedCard));
                 } else {
-                    if (isntSwipe(lastTapY, event)) {
+                    if (isSwipe(lastTapY, event)) {
                     	if (pgs.getSelectedCards().isEmpty()) {
 							game.sendAction(new PalaceSelectCardAction(this, tappedCard));
 						}
@@ -390,17 +390,28 @@ public class PalaceHumanPlayer extends GameHumanPlayer implements View.OnClickLi
                     }
                 }
             } else if (tappedCard.get_location() == upLoc) {
-                if (isntSwipe(lastTapY, event)) {
+                /*if (isntSwipe(lastTapY, event)) {
 					if (pgs.getSelectedCards().isEmpty()) {
 						game.sendAction(new PalaceSelectCardAction(this, tappedCard));
 					}
 					if (!pgs.getSelectedCards().isEmpty()) {
 						game.sendAction(new PalacePlayCardAction(this));
 					}
+
                 }
                 else {
                     game.sendAction(new PalaceSelectCardAction(this, tappedCard));
-                }
+                }*/
+				if (isSwipe(lastTapY, event)) {
+					if (pgs.getSelectedCards().isEmpty()) {
+						game.sendAction(new PalaceSelectCardAction(this, tappedCard));
+					}
+
+					game.sendAction(new PalacePlayCardAction(this));
+				}
+				else {
+					game.sendAction(new PalaceSelectCardAction(this, tappedCard));
+				}
             } else if (tappedCard.get_location() == lowLoc) {
                 game.sendAction(new PalacePlayLowerPalaceCardAction(this, tappedCard));
             } else if (tappedCard.get_location() == Location.DISCARD_PILE) {
@@ -415,7 +426,7 @@ public class PalaceHumanPlayer extends GameHumanPlayer implements View.OnClickLi
 		return true;
 	}
 
-	private boolean isntSwipe(int lastTapY, MotionEvent event) {
+	private boolean isSwipe(int lastTapY, MotionEvent event) {
 		if (this.playerNum == 0) {
 			return lastTapY - 50 > event.getY();
 		}
