@@ -30,6 +30,7 @@ public class PalaceComputerPlayerSmartAI extends GameComputerPlayer
 	private Location my_lower_palace;
 	private boolean are_locations_set;
 	private boolean is_palace_built;
+	private boolean started_building_palace;
 
 	/**
 	 *
@@ -38,8 +39,9 @@ public class PalaceComputerPlayerSmartAI extends GameComputerPlayer
 	public PalaceComputerPlayerSmartAI(String name)
 	{
 		super(name);
-		this.are_locations_set = false;
-		this.is_palace_built   = false;
+		this.are_locations_set       = false;
+		this.is_palace_built         = false;
+		this.started_building_palace = false;
 	}//END: PalaceComputerPlayerSmartAI() constructor
 
 	/**
@@ -80,14 +82,19 @@ public class PalaceComputerPlayerSmartAI extends GameComputerPlayer
 
 			if (! this.is_palace_built)
 			{
+				if (! this.started_building_palace)
+				{
+					this.game.sendAction(new PalaceChangePalaceAction(this));
+					this.started_building_palace = true;
+					return;
+				}
+				
 				if (pgs.getSelectedCards().size() > 0)
 				{
 					this.game.sendAction(new PalaceConfirmPalaceAction(this));
 					this.is_palace_built = true;
 					return;
 				}
-
-				this.game.sendAction(new PalaceChangePalaceAction(this));
 
 				Pair[] hand_palace = new Pair[8];
 				{
@@ -99,39 +106,41 @@ public class PalaceComputerPlayerSmartAI extends GameComputerPlayer
 				merge_sort(hand_palace, 0, hand_palace.length - 1);
 
 				Pair[] cards_to_be_selected = new Pair[3];
-				int j = 0;
-				boolean have_wild_card = false;
-				boolean have_high_card = false;
-				Rank tmp_rank;
-				for (int i = hand_palace.length - 1; i >= 0 && j < cards_to_be_selected.length; i--)
 				{
-					tmp_rank = hand_palace[i].get_card().get_rank();
-					if (! have_wild_card)
+					int j = 0;
+					boolean have_wild_card = false;
+					boolean have_high_card = false;
+					Rank tmp_rank;
+					for (int i = hand_palace.length - 1; i >= 0 && j < cards_to_be_selected.length; i--)
 					{
-						switch (tmp_rank)
+						tmp_rank = hand_palace[i].get_card().get_rank();
+						if (! have_wild_card)
 						{
-							case TWO:
-							case TEN:
-								cards_to_be_selected[j++] = hand_palace[i];
-								have_wild_card = true;
-								continue;
+							switch (tmp_rank)
+							{
+								case TWO:
+								case TEN:
+									cards_to_be_selected[j++] = hand_palace[i];
+									have_wild_card = true;
+									continue;
+							}
 						}
-					}
-					if (! have_high_card)
-					{
-						switch (tmp_rank)
+						if (! have_high_card)
 						{
-							case JACK:
-							case QUEEN:
-							case KING:
-							case ACE:
-								cards_to_be_selected[j++] = hand_palace[i];
-								have_high_card = true;
-								continue;
+							switch (tmp_rank)
+							{
+								case JACK:
+								case QUEEN:
+								case KING:
+								case ACE:
+									cards_to_be_selected[j++] = hand_palace[i];
+									have_high_card = true;
+									continue;
+							}
 						}
+						else if (tmp_rank.get_int_value() < JACK_INT)
+							cards_to_be_selected[j++] = hand_palace[i];
 					}
-					else if (tmp_rank.get_int_value() < JACK_INT)
-						cards_to_be_selected[j++] = hand_palace[i];
 				}
 
 				for (Pair p : cards_to_be_selected)
