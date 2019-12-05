@@ -84,6 +84,20 @@ public class PalaceHumanPlayer extends GameHumanPlayer implements View.OnClickLi
 
 	}//PalaceHumanPlayer
 
+
+	/**
+	 External Citation
+
+	 Date: 4 October 2019
+
+	 Problem: Could not get the game to boot up without having a NULLPOINTEREXCEPTION.
+
+	 Resource: Andrew Nuxoll
+
+	 Solution: He helped me set up a Hashtable for the Bitmaps which in the SurfaceView are then connected
+	 to a Pair Object using that Object's toString-method.
+	 * */
+
 	/**
 	 * initCardImages Method:
 	 * the cards are initialized in this class in order to avoid nullpointerexceptions
@@ -200,6 +214,19 @@ public class PalaceHumanPlayer extends GameHumanPlayer implements View.OnClickLi
 		helpText.setGravity(Gravity.TOP);
 		helpText.setEnabled(false);
 		helpText.setVisibility(View.INVISIBLE);
+
+
+		/**
+		 External Citation
+
+		 Date: 3 December 2019
+
+		 Problem: We did not know how to incorporate a Sound Effect into our game
+
+		 Resource: https://abhiandroid.com/androidstudio/add-audio-android-studio.html
+
+		 Solution: We used the example from this page
+		 * */
 
 		bomber = MediaPlayer.create(myActivity.getApplicationContext(), R.raw.bomb_discard_pile_sfx);
 

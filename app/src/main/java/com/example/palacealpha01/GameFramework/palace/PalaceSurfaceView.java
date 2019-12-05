@@ -279,13 +279,13 @@ public class PalaceSurfaceView extends SurfaceView
 				{
 					drawSelectionBox(canvas, xP1H, yP1H);
 				}
-//				if (localHumanPlayer.getPlayerNum() == 0)
+				if (localHumanPlayer.getPlayerNum() == 0)
 				{
 					canvas.drawBitmap(pictures.get(p.get_card().toString()), xP1H, yP1H, bitmapPaint);
 				}
-//				else
+				else
 				{
-//					canvas.drawBitmap(cardBack, xP1H, yP1H, bitmapPaint);
+					canvas.drawBitmap(cardBack, xP1H, yP1H, bitmapPaint);
 				}
 				p.setX(xP1H);
 				p.setY(yP1H);
@@ -302,13 +302,13 @@ public class PalaceSurfaceView extends SurfaceView
 					{
 						drawSelectionBox(canvas, xP1H, yP1H);
 					}
-//					if (localHumanPlayer.getPlayerNum() == 0)
+					if (localHumanPlayer.getPlayerNum() == 0)
 					{
 						canvas.drawBitmap(pictures.get(playerOneHand.get(i).get_card().toString()), xP1H, yP1H, bitmapPaint);
 					}
-//					else
+					else
 					{
-//						canvas.drawBitmap(cardBack, xP1H, yP1H, bitmapPaint);
+						canvas.drawBitmap(cardBack, xP1H, yP1H, bitmapPaint);
 					}
 					playerOneHand.get(i).setX(xP1H);
 					playerOneHand.get(i).setY(yP1H);
@@ -326,14 +326,14 @@ public class PalaceSurfaceView extends SurfaceView
 				{
 					drawSelectionBox(canvas, xP2H, yP2H);
 				}
-				//canvas.drawBitmap(cardBack, xP2H, yP2H, bitmapPaint);
-//				if (localHumanPlayer.getPlayerNum() == 1)
+				canvas.drawBitmap(cardBack, xP2H, yP2H, bitmapPaint);
+				if (localHumanPlayer.getPlayerNum() == 1)
 				{
 					canvas.drawBitmap(pictures.get(p.get_card().toString()), xP2H, yP2H, bitmapPaint);
 				}
-//				else
+				else
 				{
-//					canvas.drawBitmap(cardBack, xP2H, yP2H, bitmapPaint);
+					canvas.drawBitmap(cardBack, xP2H, yP2H, bitmapPaint);
 				}
 				p.setX(xP2H);
 				p.setY(yP2H);
@@ -349,14 +349,14 @@ public class PalaceSurfaceView extends SurfaceView
 				{
 					drawSelectionBox(canvas, xP2H, yP2H);
 				}
-				//canvas.drawBitmap(cardBack, xP2H, yP2H, bitmapPaint);
-//				if (localHumanPlayer.getPlayerNum() == 1)
+				canvas.drawBitmap(cardBack, xP2H, yP2H, bitmapPaint);
+				if (localHumanPlayer.getPlayerNum() == 1)
 				{
 					canvas.drawBitmap(pictures.get(playerTwoHand.get(i).get_card().toString()), xP2H, yP2H, bitmapPaint);
 				}
-//				else
+				else
 				{
-//					canvas.drawBitmap(cardBack, xP2H, yP2H, bitmapPaint);
+					canvas.drawBitmap(cardBack, xP2H, yP2H, bitmapPaint);
 				}
 				playerTwoHand.get(i).setX(xP2H);
 				playerTwoHand.get(i).setY(yP2H);
