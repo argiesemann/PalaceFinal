@@ -23,9 +23,11 @@ import static org.junit.Assert.assertTrue;
 public class PalaceTest
 {
 
-	//testing the shuffleDeck function
-	//Meredith Marcinko
-    //Andres: updated the shuffleTheDeck test method so that it at least ensures that the deck is changing.
+    /**
+     * testing the shuffleDeck function
+	 * @author Meredith Marcinko, Andres
+     * updated the shuffleTheDeck test method so that it at least ensures that the deck is changing.
+     */
     @Test
     public void shuffleTheDeckTest()
     {
@@ -35,7 +37,7 @@ public class PalaceTest
         pgs.shuffleTheDeck();
 
         assertNotEquals(pgs.toString(), pgs2.toString());
-    }
+    }//shuffleTheDeckTest
 
     /**
      * @author Andres Giesemann
@@ -46,7 +48,7 @@ public class PalaceTest
         PalaceGameState pgs2 = new PalaceGameState(pgs);
 
         assertEquals(pgs.toString(), pgs2.toString());
-    }
+    }//copyConstructor
 
     /**
      * @author Fredrik Olsson
@@ -67,13 +69,29 @@ public class PalaceTest
         }
 
         assertTrue(pgs.getSelectedCards().contains(temp));
-    }
+    }//selectCardsTest
 
+    /**
+     * @author Meredith Marcinko
+     */
     @Test
     public void selectPalaceCardsTest()
     {
+        PalaceGameState pgs = new PalaceGameState();
+        Pair temp = new Pair(new Card(Rank.int_to_rank(4), Suit.int_to_suit(1)), Location.DRAW_PILE);
+        for (Pair p : pgs.the_deck)
+        {
+            if (p.get_location() == Location.PLAYER_ONE_UPPER_PALACE)
+            {
+                pgs.selectPalaceCards(1, p);
+                temp = p;
+                break;
+            }
+        }
 
-    }
+        assertTrue(pgs.getSelectedCards().contains(temp));
+
+    }//selectPalaceCardsTest
 
     /**
      * tests playCard method from PalaceGameState
@@ -107,7 +125,7 @@ public class PalaceTest
             }
 
         }
-    }
+    }//playCardsTest
 
     /**
      * tests changePalace method from PalaceGameState by checking to see that upper palace cards
@@ -135,13 +153,37 @@ public class PalaceTest
             }
         }
         assertEquals(counter2, palaceCards.length);
-    }
+    }//changePalaceTest
 
+    /**
+     * @author Meredith Marcinko
+     */
     @Test
     public void confirmPalaceTest()
     {
+        PalaceGameState pgs = new PalaceGameState();
+        Pair temp = new Pair(new Card(Rank.int_to_rank(4), Suit.int_to_suit(1)), Location.DRAW_PILE);
+        for (Pair p : pgs.the_deck)
+        {
+            if (p.get_location() == Location.PLAYER_ONE_UPPER_PALACE)
+            {
+                pgs.selectPalaceCards(1, p);
+                temp = p;
+                break;
+            }
+        }
 
-    }
+        pgs.confirmPalace(1);
+
+        for (Pair p : pgs.the_deck)
+        {
+            if (p.get_location() == Location.PLAYER_ONE_UPPER_PALACE  && p.equals(temp))
+            {
+                assertEquals(p, temp);
+            }
+
+        }
+    }//confirmPalaceTest
 
     /**
      * tests takeDiscardPile method from PalaceGameState by checking
@@ -170,19 +212,30 @@ public class PalaceTest
         pgs.takeDiscardPile(1);
 
         assertEquals(temp.get_location(), Location.PLAYER_TWO_HAND);
-    }
+    }//takeDiscardPileTest
 
+    /**
+     * Tests to see if the deck dealt the right amount of cards
+     * to each location, including players' hands and the players' upper palace
+     * @author Meredith Marcinko
+     */
     @Test
     public void dealTheDeckTest()
     {
 
-    }
+        PalaceGameState pgs = new PalaceGameState();
+        pgs.dealTheDeck();
+        assertEquals(pgs.getPlayerOneHandSize(), 5);
+        assertEquals(pgs.getPlayerTwoHandSize(), 5);
+        assertEquals(pgs.getPlayerOneUpperPalaceSize(), 3);
+        assertEquals(pgs.getPlayerTwoUpperPalaceSize(), 3);
+    }//dealTheDeckTest
 
     @Test
     public void bombDiscardPileTest()
     {
 
-    }
+    }//bombDiscardPileTest
 
     @Test
     public void isDrawPileEmptyTest()
@@ -195,11 +248,33 @@ public class PalaceTest
 
 	    assertEquals(0, after);
 
-    }
+    }//isDrawPileEmptyTest
 
+    /**
+     * Checks to see if the Lower palace card that was selected was play and put in the discard pile
+     * @author Meredith Marcinko
+     */
     @Test
-    public void playLowerPalaceCardTest() {
+    public void playLowerPalaceCardTest()
+    {
         PalaceGameState pgs = new PalaceGameState();
-        
-    }
-}
+        Pair temp = new Pair(new Card(Rank.int_to_rank(4), Suit.int_to_suit(1)), Location.DRAW_PILE);
+        for (Pair p : pgs.the_deck)
+        {
+            if (p.get_location() == Location.PLAYER_TWO_LOWER_PALACE)
+            {
+                pgs.selectCards(2, p);
+                temp = p;
+                break;
+            }
+        }
+        pgs.playLowerPalaceCard(2, temp);
+        for (Pair p : pgs.the_deck)
+        {
+            if ((p.get_location() == Location.DISCARD_PILE  || p.get_location() == Location.DEAD_PILE) && p.equals(temp))
+            {
+                assertEquals(p, temp);
+            }
+        }
+    }//playLowerPalaceCardTest
+}//PalaceTest
