@@ -110,7 +110,7 @@ public class Pair implements Serializable
 	}//END: setY() method
 
 	/**
-	 *
+	 * Returns a String representation of a Pair object
 	 * @return
 	 */
 	@Override
@@ -156,7 +156,8 @@ public class Pair implements Serializable
 	}//END: toString() method
 
 	/**
-	 *
+	 * Returns true iff the passed Object (obj) is a Pair object, and has an identical Card object
+	 * and Location enum
 	 * @param obj
 	 * @return
 	 */

@@ -49,7 +49,7 @@ public class Card implements Serializable
 	}//END: get_rank() method
 
 	/**
-	 *
+	 * Returns a String representation of a Card object
 	 * @return
 	 */
 	@Override
@@ -124,7 +124,7 @@ public class Card implements Serializable
 	}//END: toString() method
 
 	/**
-	 *
+	 * Retruns true iff the passed Object (obj) is a Card object, and has identical Suit and Rank enums
 	 * @param obj
 	 * @return
 	 */
