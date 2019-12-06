@@ -94,7 +94,7 @@ public class PalaceHumanPlayer extends GameHumanPlayer implements View.OnClickLi
 
 	 Resource: Andrew Nuxoll
 
-	 Solution: He helped me set up a Hashtable for the Bitmaps which in the SurfaceView are then connected
+	 Solution: He helped us set up a Hashtable for the Bitmaps which in the SurfaceView are then connected
 	 to a Pair Object using that Object's toString-method.
 	 * */
 

@@ -12,7 +12,14 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-
+        <!--
+             External Citation
+             Date: 26 November 2019
+             Problem: Game malfunctioned in portrait orientation
+             Resource:
+             https://android.jlelse.eu/handling-orientation-changes-in-android-7072958c442a
+             Solution: I used the example code from this post.
+        -->
         <activity android:name="com.example.palacealpha01.GameFramework.palace.PalaceMainActivity"
             android:screenOrientation="landscape"
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize" >
