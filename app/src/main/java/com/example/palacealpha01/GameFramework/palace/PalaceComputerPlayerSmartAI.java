@@ -79,7 +79,6 @@ public class PalaceComputerPlayerSmartAI extends GameComputerPlayer
 		if (info instanceof PalaceGameState &&
 				((PalaceGameState) info).getTurn() == this.playerNum)
 		{
-			sleep(2);
 			info.setGame(this.game);
 			PalaceGameState pgs = (PalaceGameState) info;
 
@@ -93,6 +92,7 @@ public class PalaceComputerPlayerSmartAI extends GameComputerPlayer
 			{
 				if (! this.started_building_palace)
 				{
+					sleep(1);
 					this.game.sendAction(new PalaceChangePalaceAction(this));
 					this.started_building_palace = true;
 					return;
@@ -100,6 +100,7 @@ public class PalaceComputerPlayerSmartAI extends GameComputerPlayer
 
 				if (pgs.getSelectedCards().size() > 0)
 				{
+					sleep(1);
 					this.game.sendAction(new PalaceConfirmPalaceAction(this));
 					this.is_palace_built = true;
 					return;
@@ -156,7 +157,9 @@ public class PalaceComputerPlayerSmartAI extends GameComputerPlayer
 				}
 
 				for (Pair p : cards_to_be_selected)
+				{
 					this.action_queue.add(new PalaceSelectPalaceCardAction(this, p));
+				}
 
 				this.send_first_action();
 				return;
@@ -166,6 +169,7 @@ public class PalaceComputerPlayerSmartAI extends GameComputerPlayer
 			// 		then play it
 			if (pgs.getSelectedCards().size() > 0)
 			{
+				sleep(1);
 				this.game.sendAction(new PalacePlayCardAction(this));
 				return;
 			}
@@ -213,6 +217,7 @@ public class PalaceComputerPlayerSmartAI extends GameComputerPlayer
 			if (! has_hand         &&
 					! has_upper_palace)
 			{
+				sleep(1);
 				this.game.sendAction(new PalacePlayLowerPalaceCardAction(this,
 						lower_palace.get((int) (Math.random() * lower_palace.size()))));
 				return;
@@ -236,7 +241,9 @@ public class PalaceComputerPlayerSmartAI extends GameComputerPlayer
 							 i < legal_hand.size() &&
 							 legal_hand.get(i).get_card().get_rank() == smallest_pair.get_card().get_rank();
 					 i++)
+				{
 					this.action_queue.add(new PalaceSelectCardAction(this, legal_hand.get(i)));
+				}
 				this.send_first_action();
 			}
 			else
@@ -270,6 +277,7 @@ public class PalaceComputerPlayerSmartAI extends GameComputerPlayer
 	 */
 	private void send_first_action()
 	{
+		sleep(1);
 		this.game.sendAction(this.action_queue.get(0));
 		this.action_queue.remove(0);
 		return;

@@ -59,12 +59,10 @@ public class PalaceComputerPlayerRandomAI extends GameComputerPlayer
 
 				if (pgs.getSelectedCards().size() > 0)
 				{
-					sleep(2);
+					sleep(1);
 					game.sendAction(new PalacePlayCardAction(this));
 					return;
 				}
-
-				//game.sendAction(new PalaceSkipTurn(this));
 
 				//used for temporarily storing the cards in computer player's hand and palace
 				ArrayList<Pair> my_hand = new ArrayList<>();
@@ -110,15 +108,17 @@ public class PalaceComputerPlayerRandomAI extends GameComputerPlayer
 				if(legalCards.size()==0){
 					sleep(2);
 					game.sendAction(new PalaceTakeDiscardPileAction(this));
+					return;
 				}
 				else if (my_hand.size() > 0)
 				{
 					Pair selected_pair = my_hand.get((int) (Math.random() * my_hand.size()));
+					sleep(1);
 					game.sendAction(new PalaceSelectCardAction(this, selected_pair));
 					return;
 				}
 
-
+				sleep(2);
 				game.sendAction(new PalaceTakeDiscardPileAction(this));
 			}
 		}
