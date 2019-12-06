@@ -21,6 +21,11 @@ public class Pair implements Serializable
 	private int x;
 	private int y;
 
+	/**
+	 * Default constructor for Pair.java
+	 * @param card
+	 * @param location
+	 */
 	public Pair(Card card, Location location)
 	{
 		this.card = card;
@@ -29,6 +34,10 @@ public class Pair implements Serializable
 		this.y = -1; // initial invalid value
 	}//END: Pair() constructor
 
+	/**
+	 * Copy constructor for Pair.java
+	 * @param that
+	 */
 	public Pair(Pair that)
 	{
 		this.card = new Card(that.card);
@@ -37,52 +46,77 @@ public class Pair implements Serializable
 		this.y = that.y;
 	}//END: Pair() copy constructor
 
+	/**
+	 *
+	 * @return
+	 */
 	public Card get_card()
 	{
 		return card;
 	}//END: get_card() method
 
+	/**
+	 *
+	 * @return
+	 */
 	public Location get_location()
 	{
 		return location;
 	}//END: get_location() method
 
+	/**
+	 *
+	 * @param location
+	 */
 	public void set_location(Location location)
 	{
 		this.location = location;
 	}//END: set_location() method
 
+	/**
+	 *
+	 * @return
+	 */
 	public int getX()
 	{
 		return this.x;
 	}//END: getY() method
 
+	/**
+	 *
+	 * @return
+	 */
 	public int getY()
 	{
 		return this.y;
 	}//END: getY() method
 
+	/**
+	 *
+	 * @param x
+	 */
 	public void setX(int x)
 	{
 		this.x = x;
 	}//END: setX() method
 
+	/**
+	 *
+	 * @param y
+	 */
 	public void setY(int y)
 	{
 		this.y = y;
 	}//END: setY() method
 
 	/**
-	 * Represents a Pair object with a string by listing the card and its location
-	 * @return String representation of Pair object
+	 *
+	 * @return
 	 */
 	@Override
 	public String toString()
 	{
-
-		String return_str = "";
-
-		return_str = card.toString() + " in ";
+		String return_str = card.toString() + " in ";
 
 		switch (location)
 		{
@@ -121,6 +155,11 @@ public class Pair implements Serializable
 		return return_str;
 	}//END: toString() method
 
+	/**
+	 *
+	 * @param obj
+	 * @return
+	 */
 	@Override
 	public boolean equals(Object obj)
 	{

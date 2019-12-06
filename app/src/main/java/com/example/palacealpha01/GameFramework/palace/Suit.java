@@ -29,6 +29,10 @@ public enum Suit implements Serializable
 
 	private int suit_num;
 
+	/**
+	 * Default enum constructor for Suit.java
+	 * @param suit_num
+	 */
 	Suit(int suit_num)
 	{
 		this.suit_num = suit_num;
@@ -36,11 +40,21 @@ public enum Suit implements Serializable
 
 
 
+	/**
+	 *
+	 * @return
+	 */
 	public int get_suit_num()
 	{
 		return this.suit_num;
 	}//END: get_suit_num() method
 
+	/**
+	 * This function takes an integer and returns the corresponding Suit enumeration.
+	 * This function is used to translate an number into a card suit.
+	 * @param num
+	 * @return
+	 */
 	public static Suit int_to_suit(int num)
 	{
 		switch (num)

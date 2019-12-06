@@ -47,17 +47,32 @@ public enum Rank implements Serializable
 
 	private int int_value;
 
+	/**
+	 * Default enum constructor for Rank.java
+	 * @param int_value
+	 */
 	Rank(int int_value)
 	{
 		this.int_value = int_value;
 	}//END: Rank() enum constructor
 
 
+
+	/**
+	 *
+	 * @return
+	 */
 	public int get_int_value()
 	{
 		return this.int_value;
 	}//END: get_int_value() method
 
+	/**
+	 * This function takes an integer and returns the corresponding Rank enumeration.
+	 * This function is used to translate an number into a card rank.
+	 * @param num
+	 * @return
+	 */
 	public static Rank int_to_rank(int num)
 	{
 		switch (num)

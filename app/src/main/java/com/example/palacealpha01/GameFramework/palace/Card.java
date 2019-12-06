@@ -2,13 +2,7 @@
  * @formatter:off
  */
 package com.example.palacealpha01.GameFramework.palace;
-/*
-import android.graphics.Bitmap;
-import android.graphics.Canvas;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.Paint;
-import android.graphics.drawable.BitmapDrawable;
-*/
+
 import android.util.Log;
 
 import java.io.Serializable;
@@ -17,43 +11,47 @@ import java.io.Serializable;
  * @author Maximilian
  * <p>
  * This class combines both a suit and rank enumeration to create a card object. These card objects
- * represent the card objects in the PalaceGameState.java class, and in the future we plan to include these
- * card objects in the CardCountingAI.java class. In the furture, we also plan to include a BitmapDrawable
- * variable, which will link the card object to a .PNG file that is an image of the card that the card
- * object is representing, and a draw() method, which will allow the a card object to draw itself using
- * the BitmagImage it is linked with.
+ * represent the card objects in the PalaceGameState.java class.
  */
 public class Card implements Serializable
 {
 	private Suit suit;
 	private Rank rank;
-//	private Bitmap image;
 
-	public Card(Rank rank, Suit suit) /*BitmapDrawable image)*/
+	/**
+	 * Default constructor for Card.java
+	 * @param rank
+	 * @param suit
+	 */
+	public Card(Rank rank, Suit suit)
 	{
 		this.suit = suit;
 		this.rank = rank;
-//      this.image = image;
 	}//END: Card() constructor
 
+	/**
+	 * Copy constructor for Card.java
+	 * @param that
+	 */
 	public Card(Card that)
 	{
 		this.suit = that.suit;
 		this.rank = that.rank;
-//		this.image = that.image;
 	}//END: Card() copy constructor
 
-/*	public void draw(Canvas c, float x, float y, Paint p)
-	{
-		c.drawBitmap(this.image, x, y, p);
-	}//END: draw() method
-*/
-
+	/**
+	 *
+	 * @return
+	 */
 	public Rank get_rank()
 	{
 		return this.rank;
 	}//END: get_rank() method
 
+	/**
+	 *
+	 * @return
+	 */
 	@Override
 	public String toString()
 	{
@@ -125,6 +123,11 @@ public class Card implements Serializable
 		return return_str;
 	}//END: toString() method
 
+	/**
+	 *
+	 * @param obj
+	 * @return
+	 */
 	@Override
 	public boolean equals(Object obj)
 	{
@@ -135,24 +138,7 @@ public class Card implements Serializable
 			return false;
 		if (this.rank != ((Card) obj).rank)
 			return false;
-//		if (! this.image.equals(((Card) obj).image))
-		//	return false;
 
 		return true;
 	}//END: equals() method
-
-/*	public void setImage(Bitmap image)
-	{
-		this.image = image;
-	}
-*/
-/*	public Bitmap getImage()
-	}//END: setImage() method
-
-	public Bitmap getImage()
-	{
-		return image;
-	}
-*/
-	}//END: Card Class
-
+}//END: Card Class

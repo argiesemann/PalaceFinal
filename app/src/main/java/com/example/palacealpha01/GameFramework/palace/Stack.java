@@ -28,7 +28,7 @@ public class Stack implements Serializable
 		private StackNode next;
 
 		/**
-		 * default constructor for the StackNode class
+		 * Default constructor for the StackNode class
 		 * @param data
 		 */
 		public StackNode(Pair data)
@@ -37,6 +37,11 @@ public class Stack implements Serializable
 			this.next = null;
 		}//END: StackNode() constructor
 
+		/**
+		 *
+		 * @param obj
+		 * @return
+		 */
 		@Override
 		public boolean equals(Object obj)
 		{
@@ -53,13 +58,19 @@ public class Stack implements Serializable
 	private StackNode head; // This is the head/top of the Stack. It is the first Node in the stack's linked list.
 
 	/**
-	 * default constructor for the Stack.java class
+	 * Default constructor for the Stack.java class
 	 */
 	public Stack()
 	{
 		this.head = null;
 	}//END: Stack() default constructor
 
+	/**
+	 * This is an alternative constructor for Stack.java, which allows initial nodes from an array of
+	 * Pair objects, to be pushed to the new stack immediately on construction.
+	 * @param initial_nodes
+	 * @param in_order
+	 */
 	public Stack(Pair[] initial_nodes, boolean in_order)
 	{
 		this.head = null;
@@ -71,6 +82,12 @@ public class Stack implements Serializable
 				this.push(initial_nodes[i]);
 	}//END: Stack() constructor
 
+	/**
+	 * This is an alternative constructor for Stack.java, which allows initial nodes from an ArrayList
+	 * of Pair objects, to be pushed to the new stack immediately on construction.
+	 * @param initial_nodes
+	 * @param in_order
+	 */
 	public Stack(ArrayList<Pair> initial_nodes, boolean in_order)
 	{
 		this.head = null;
@@ -83,7 +100,7 @@ public class Stack implements Serializable
 	}//END: Stack() constructor
 
 	/**
-	 * copy constructor for the Stack.java class
+	 * Copy constructor for the Stack.java class
 	 * This is the wrapper method for the copy_constructor() recursive method.
 	 * @param that
 	 */
@@ -94,7 +111,8 @@ public class Stack implements Serializable
 	}//END: Stack() copy constructor
 
 	/**
-	 * This is a recursive method.
+	 * This method recursively iterates through each node in a Stack, and pushes each node's data to
+	 * the new stack in a post-order method.
 	 * @param current
 	 */
 	private void copy_constructor(StackNode current)
@@ -110,6 +128,10 @@ public class Stack implements Serializable
 		this.push(current.data);
 	}//END: copy_constructor() recursive method
 
+	/**
+	 * Pushes a Pair object to the stack
+	 * @param data
+	 */
 	public void push(Pair data)
 	{
 		StackNode new_head = new StackNode(data);
@@ -117,6 +139,10 @@ public class Stack implements Serializable
 		this.head = new_head;
 	}//END: push() method
 
+	/**
+	 * Pops a Pair object from the stack
+	 * @return
+	 */
 	public Pair pop()
 	{
 		if (this.head == null)
@@ -126,6 +152,10 @@ public class Stack implements Serializable
 		return rtn;
 	}//END: pop() method
 
+	/**
+	 * Peeks a Pair object from the stack
+	 * @return
+	 */
 	public Pair peek()
 	{
 		if (this.head == null)
@@ -133,6 +163,10 @@ public class Stack implements Serializable
 		return this.head.data;
 	}//END: peek() method
 
+	/**
+	 * Returns true iff the top four Pairs on the Stack have the same Rank enums
+	 * @return
+	 */
 	public boolean are_next_four_equal()
 	{
 		if (this.head == null)
@@ -150,11 +184,18 @@ public class Stack implements Serializable
 		return true;
 	}//END: are_next_four_equal() method
 
+	/**
+	 * Returns true iff the Stack is empty
+	 * @return
+	 */
 	public boolean is_empty()
 	{
 		return (this.head == null);
 	}//END: is_empty() method
 
+	/**
+	 * Empties the Stack
+	 */
 	public void clear()
 	{
 		while (! this.is_empty())
@@ -186,7 +227,9 @@ public class Stack implements Serializable
 	}
 
 	/**
-	 * This is a recursive function.
+	 * This function recursively iterates through the nodes in two parallel Stacks, and checks if each
+	 * node has the exact same Pair object.
+	 * This function is used to test if two Stacks are identical.
 	 * @param this_current
 	 * @param that_current
 	 * @return
@@ -213,7 +256,9 @@ public class Stack implements Serializable
 	}
 
 	/**
-	 * This is a recursive method.
+	 * This function recursively iterates through each node in a Stack, and appends a String representation
+	 * of each Pair object within each node to a string 's', and returns 's' when the recursive loop
+	 * unravels.
 	 * @param s
 	 * @param current
 	 */
@@ -230,6 +275,7 @@ public class Stack implements Serializable
 	}//END: to_string() recursive method
 
 	/**
+	 * Returns the number of nodes in the Stack
 	 * This is the wrapper method for the size_rec() recursive method.
 	 * @return
 	 */
@@ -239,7 +285,8 @@ public class Stack implements Serializable
 	}
 
 	/**
-	 * This is a recursive method.
+	 * This function recursively iterates through each node in a Stack, and returns the total number
+	 * of nodes within that Stack.
 	 * @param current
 	 * @return
 	 */

@@ -3,8 +3,6 @@
  */
 package com.example.palacealpha01.GameFramework.palace;
 
-import android.util.Log;
-
 import com.example.palacealpha01.GameFramework.GameComputerPlayer;
 import com.example.palacealpha01.GameFramework.actionMessage.GameAction;
 import com.example.palacealpha01.GameFramework.infoMessage.GameInfo;
@@ -20,8 +18,6 @@ import static com.example.palacealpha01.GameFramework.palace.Location.PLAYER_TWO
 import static com.example.palacealpha01.GameFramework.palace.Location.PLAYER_TWO_UPPER_PALACE;
 import static com.example.palacealpha01.GameFramework.palace.Rank.JACK_INT;
 import static com.example.palacealpha01.GameFramework.palace.Rank.QUEEN_INT;
-import static com.example.palacealpha01.GameFramework.palace.Rank.SEVEN;
-import static com.example.palacealpha01.GameFramework.palace.Rank.TEN_INT;
 
 /**
  * @author Maximilian
@@ -36,8 +32,10 @@ public class PalaceComputerPlayerSmartAI extends GameComputerPlayer
 	private boolean started_building_palace;
 	private ArrayList<GameAction> action_queue;
 
+
+
 	/**
-	 *
+	 * Default constructor for PalaceComputerPlayerSmartAI.java
 	 * @param name
 	 */
 	public PalaceComputerPlayerSmartAI(String name)
@@ -50,7 +48,9 @@ public class PalaceComputerPlayerSmartAI extends GameComputerPlayer
 	}//END: PalaceComputerPlayerSmartAI() constructor
 
 	/**
-	 *
+	 * This method receives a GameInfo object, which can be a PalaceGameState or NotYourTurnInfo object,
+	 * and based on the data within the PalaceGameState object, sends a GameAction object to PalaceLocalGame.java,
+	 * which is how the SmartAI makes moves in the game.
 	 * @param info
 	 */
 	@Override
@@ -77,7 +77,7 @@ public class PalaceComputerPlayerSmartAI extends GameComputerPlayer
 			return;
 
 		if (info instanceof PalaceGameState &&
-			((PalaceGameState) info).getTurn() == this.playerNum)
+				((PalaceGameState) info).getTurn() == this.playerNum)
 		{
 			sleep(2);
 			info.setGame(this.game);
@@ -156,7 +156,6 @@ public class PalaceComputerPlayerSmartAI extends GameComputerPlayer
 				}
 
 				for (Pair p : cards_to_be_selected)
-//					this.game.sendAction(new PalaceSelectPalaceCardAction(this, p));
 					this.action_queue.add(new PalaceSelectPalaceCardAction(this, p));
 
 				this.send_first_action();
@@ -202,7 +201,7 @@ public class PalaceComputerPlayerSmartAI extends GameComputerPlayer
 			// but none are playable,
 			//		then take the discard pile
 			if (has_hand && legal_hand.size() == 0 ||
-				! has_hand && has_upper_palace && legal_upper_palace.size() == 0)
+					! has_hand && has_upper_palace && legal_upper_palace.size() == 0)
 			{
 				sleep(2);
 				this.game.sendAction(new PalaceTakeDiscardPileAction(this));
@@ -212,7 +211,7 @@ public class PalaceComputerPlayerSmartAI extends GameComputerPlayer
 			// if we don't have cards in neither our hand, nor our upper palace,
 			//		then randomly select are card from our lower palace
 			if (! has_hand         &&
-				! has_upper_palace)
+					! has_upper_palace)
 			{
 				this.game.sendAction(new PalacePlayLowerPalaceCardAction(this,
 						lower_palace.get((int) (Math.random() * lower_palace.size()))));
@@ -224,7 +223,6 @@ public class PalaceComputerPlayerSmartAI extends GameComputerPlayer
 				merge_sort(legal_hand);
 
 				Pair smallest_pair = legal_hand.get(0);
-//				this.game.sendAction(new PalaceSelectCardAction(this, smallest_pair));
 				this.action_queue.add(new PalaceSelectCardAction(this, smallest_pair));
 
 				if (smallest_pair.get_card().get_rank().get_int_value() >= QUEEN_INT)
@@ -235,59 +233,17 @@ public class PalaceComputerPlayerSmartAI extends GameComputerPlayer
 
 				for (int i = 1;
 					 i < 4 &&
-					 i < legal_hand.size() &&
-					 legal_hand.get(i).get_card().get_rank() == smallest_pair.get_card().get_rank();
+							 i < legal_hand.size() &&
+							 legal_hand.get(i).get_card().get_rank() == smallest_pair.get_card().get_rank();
 					 i++)
-//					this.game.sendAction(new PalaceSelectCardAction(this, legal_hand.get(i)));
 					this.action_queue.add(new PalaceSelectCardAction(this, legal_hand.get(i)));
 				this.send_first_action();
-
-/*				int smallest_cnt = 0;
-				for (int i = 1;
-					 legal_hand.get(i).get_card().get_rank() == smallest_pair.get_card().get_rank() &&
-					 i < legal_hand.size();
-					 i++, smallest_cnt++);
-
-				for (int i = 0; i < smallest_cnt; i++)
-					this.game.sendAction(new PalaceSelectCardAction(this, legal_hand.get(i)));
-
-/*				Pair smallest_pair = null;
-				int smallest_rank = TEN_INT + 1;
-				int p_int;
-				for (Pair p : legal_hand)
-				{
-					p_int = p.get_card().get_rank().get_int_value();
-					if (p_int < smallest_rank)
-					{
-						smallest_pair = p;
-						smallest_rank = p_int;
-					}
-				}
-
-				// if the smallest card is a Queen or Higher,
-				// 		then play it
-				if (smallest_rank >= QUEEN_INT)
-				{
-					this.game.sendAction(new PalaceSelectCardAction(this, smallest_pair));
-					return;
-				}
-
-				Pair[] cards_to_be_selected = new Pair[4];
-				int i = 0;
-				for (Pair p : legal_hand)
-					if (p.get_card().get_rank().get_int_value() == smallest_rank)
-						cards_to_be_selected[i++] = p;
-
-				for (Pair pair : cards_to_be_selected)
-					if (pair != null)
-						this.game.sendAction(new PalaceSelectCardAction(this, pair));
-*/			}
+			}
 			else
 			{
 				merge_sort(legal_upper_palace);
 
 				Pair smallest_pair = legal_upper_palace.get(0);
-//				this.game.sendAction(new PalaceSelectCardAction(this, smallest_pair));
 				this.action_queue.add(new PalaceSelectCardAction(this, smallest_pair));
 
 				if (smallest_pair.get_card().get_rank().get_int_value() >= QUEEN_INT)
@@ -298,56 +254,20 @@ public class PalaceComputerPlayerSmartAI extends GameComputerPlayer
 
 				for (int i = 1;
 					 i < 3 &&
-					 i < legal_upper_palace.size() &&
-					 legal_upper_palace.get(i).get_card().get_rank() == smallest_pair.get_card().get_rank();
+							 i < legal_upper_palace.size() &&
+							 legal_upper_palace.get(i).get_card().get_rank() == smallest_pair.get_card().get_rank();
 					 i++)
-//					this.game.sendAction(new PalaceSelectCardAction(this, legal_upper_palace.get(i)));
 					this.action_queue.add(new PalaceSelectCardAction(this, legal_upper_palace.get(i)));
 				this.send_first_action();
-
-/*				int smallest_cnt = 0;
-				for (int i = 1;
-					 legal_upper_palace.get(i).get_card().get_rank() == p.get_card().get_rank() &&
-					 i < legal_upper_palace.size();
-					 i++, smallest_cnt++);
-
-				for (int i = 0; i < smallest_cnt; i++)
-					this.game.sendAction(new PalaceSelectCardAction(this, legal_upper_palace.get(i)));
-
-/*				Pair smallest_pair = null;
-				int smallest_rank = TEN_INT + 1;
-				int p_int;
-				for (Pair p : legal_upper_palace)
-				{
-					p_int = p.get_card().get_rank().get_int_value();
-					if (p_int < smallest_rank)
-					{
-						smallest_pair = p;
-						smallest_rank = p_int;
-					}
-				}
-
-				// if the smallest card is a Queen or Higher,
-				// 		then play it
-				if (smallest_rank >= QUEEN_INT)
-				{
-					this.game.sendAction(new PalaceSelectCardAction(this, smallest_pair));
-					return;
-				}
-
-				Pair[] cards_to_be_selected = new Pair[3];
-				int i = 0;
-				for (Pair p : legal_upper_palace)
-					if (p.get_card().get_rank().get_int_value() == smallest_rank)
-						cards_to_be_selected[i++] = p;
-
-				for (Pair p : cards_to_be_selected)
-					if (p != null)
-						this.game.sendAction(new PalaceSelectCardAction(this, p));
-*/			}
+			}
 		}
 	}//END: receiveInfo() method
 
+
+
+	/**
+	 * This method sends the head gameAction, of the action_queue, to PalaceLocalGame.java
+	 */
 	private void send_first_action()
 	{
 		this.game.sendAction(this.action_queue.get(0));
@@ -356,7 +276,8 @@ public class PalaceComputerPlayerSmartAI extends GameComputerPlayer
 	}
 
 	/**
-	 *
+	 * This function takes an array of Pair objects, and sorts it based on the integer value of the
+	 * Rank enum of the Card object within each Pair object.
 	 * @param arr
 	 */
 	private static void merge_sort(Pair[] arr)
@@ -367,15 +288,31 @@ public class PalaceComputerPlayerSmartAI extends GameComputerPlayer
 	}//END: merge_sort() function
 
 	/**
-	 *
+	 * This function takes a sub array of 'arr' and sorts it based on the integer value of the Rank
+	 * enum of the Card object within each Pair object.
 	 * @param arr
 	 * @param l
 	 * @param r
 	 */
 	private static void merge_sort(Pair[] arr, int l, int r)
 	{
+		/* EXTERNAL CITATION
+		 *      Date:		2th December 2019
+		 * 	    Problem:	The SmartAI's algorithm for determining which cards to pick for its upper
+		 * 						palace, or which cards cards to play each turn, was inefficient. I found
+		 * 						that if the list of legal cards the SmartAI could choose from was sorted,
+		 * 						its algorithm would be much simpler. I chose merge-sort, because it's
+		 * 						almost as efficient as quick-sort, and there's a chance the cards could
+		 * 						be given to the SmartAI already sorted, which would make quick-sort
+		 * 						really inefficient.
+		 * 	    Resource:	https://www.geeksforgeeks.org/merge-sort/
+		 * 	    Solution:	I read the GeeksForGeeks page on merge-sort, to get the idea of how to implement
+		 * 						merge-sort in Java. Some of this code was copied, and the rest was written
+		 * 						by me, but most of it was copied.
+		 */
+
 		if (l < r          &&
-			r < arr.length)
+				r < arr.length)
 		{
 			int m = ((r - l) / 2) + l;
 
@@ -389,7 +326,7 @@ public class PalaceComputerPlayerSmartAI extends GameComputerPlayer
 	}//END: merge_sort() function
 
 	/**
-	 *
+	 * This function takes two sub arrays of 'arr' and merges them together, in order.
 	 * @param arr
 	 * @param l
 	 * @param m
@@ -397,6 +334,21 @@ public class PalaceComputerPlayerSmartAI extends GameComputerPlayer
 	 */
 	private static void merge(Pair[] arr, int l, int m, int r)
 	{
+		/* EXTERNAL CITATION
+		 *      Date:		2th December 2019
+		 * 	    Problem:	The SmartAI's algorithm for determining which cards to pick for its upper
+		 * 						palace, or which cards cards to play each turn, was inefficient. I found
+		 * 						that if the list of legal cards the SmartAI could choose from was sorted,
+		 * 						its algorithm would be much simpler. I chose merge-sort, because it's
+		 * 						almost as efficient as quick-sort, and there's a chance the cards could
+		 * 						be given to the SmartAI already sorted, which would make quick-sort
+		 * 						really inefficient.
+		 * 	    Resource:	https://www.geeksforgeeks.org/merge-sort/
+		 * 	    Solution:	I read the GeeksForGeeks page on merge-sort, to get the idea of how to implement
+		 * 						merge-sort in Java. Some of this code was copied, and the rest was written
+		 * 						by me, but most of it was copied.
+		 */
+
 		// Sub-array sizes
 		int len_l = (m - l) + 1;
 		int len_r = r - m;
@@ -418,7 +370,7 @@ public class PalaceComputerPlayerSmartAI extends GameComputerPlayer
 
 		// Repopulate arr
 		while (i < len_l &&
-			   j < len_r)
+				j < len_r)
 		{
 			if (L[i].get_card().get_rank().get_int_value() <= R[j].get_card().get_rank().get_int_value())
 				arr[k++] = L[i++];
@@ -436,7 +388,8 @@ public class PalaceComputerPlayerSmartAI extends GameComputerPlayer
 	}//END: merge() function
 
 	/**
-	 *
+	 * This function takes an ArrayList of Pair objects, and sorts it based on the integer value of
+	 * the Rank enum of the Card object within each Pair object.
 	 * @param arr_list
 	 */
 	private static void merge_sort(ArrayList<Pair> arr_list)
@@ -446,10 +399,32 @@ public class PalaceComputerPlayerSmartAI extends GameComputerPlayer
 		merge_sort(arr_list, l, r);
 	}//END: merge_sort() function
 
+	/**
+	 * This function takes a sub ArrayList of 'arr_list' and sorts it based on the integer value of
+	 * Rank enum of the Card object within each Pair object.
+	 * @param arr_list
+	 * @param l
+	 * @param r
+	 */
 	private static void merge_sort(ArrayList<Pair> arr_list, int l, int r)
 	{
+		/* EXTERNAL CITATION
+		 *      Date:		2th December 2019
+		 * 	    Problem:	The SmartAI's algorithm for determining which cards to pick for its upper
+		 * 						palace, or which cards cards to play each turn, was inefficient. I found
+		 * 						that if the list of legal cards the SmartAI could choose from was sorted,
+		 * 						its algorithm would be much simpler. I chose merge-sort, because it's
+		 * 						almost as efficient as quick-sort, and there's a chance the cards could
+		 * 						be given to the SmartAI already sorted, which would make quick-sort
+		 * 						really inefficient.
+		 * 	    Resource:	https://www.geeksforgeeks.org/merge-sort/
+		 * 	    Solution:	I read the GeeksForGeeks page on merge-sort, to get the idea of how to implement
+		 * 						merge-sort in Java. Some of this code was copied, and the rest was written
+		 * 						by me, but most of it was copied.
+		 */
+
 		if (l < r               &&
-			r < arr_list.size())
+				r < arr_list.size())
 		{
 			int m = ((r - l) / 2) + l;
 
@@ -462,8 +437,30 @@ public class PalaceComputerPlayerSmartAI extends GameComputerPlayer
 		}
 	}//END: merge_sort() function
 
+	/**
+	 * This function takes two sub ArrayLists of 'arr_list' and merges them together, in order.
+	 * @param arr_list
+	 * @param l
+	 * @param m
+	 * @param r
+	 */
 	private static void merge(ArrayList<Pair> arr_list, int l, int m, int r)
 	{
+		/* EXTERNAL CITATION
+		 *      Date:		2th December 2019
+		 * 	    Problem:	The SmartAI's algorithm for determining which cards to pick for its upper
+		 * 						palace, or which cards cards to play each turn, was inefficient. I found
+		 * 						that if the list of legal cards the SmartAI could choose from was sorted,
+		 * 						its algorithm would be much simpler. I chose merge-sort, because it's
+		 * 						almost as efficient as quick-sort, and there's a chance the cards could
+		 * 						be given to the SmartAI already sorted, which would make quick-sort
+		 * 						really inefficient.
+		 * 	    Resource:	https://www.geeksforgeeks.org/merge-sort/
+		 * 	    Solution:	I read the GeeksForGeeks page on merge-sort, to get the idea of how to implement
+		 * 						merge-sort in Java. Some of this code was copied, and the rest was written
+		 * 						by me, but most of it was copied.
+		 */
+
 		// Sub-array sizes
 		int len_l = (m - l) + 1;
 		int len_r = r - m;
@@ -485,7 +482,7 @@ public class PalaceComputerPlayerSmartAI extends GameComputerPlayer
 
 		// Repopulate arr
 		while (i < len_l &&
-			   j < len_r)
+				j < len_r)
 		{
 			if (L[i].get_card().get_rank().get_int_value() <= R[j].get_card().get_rank().get_int_value())
 				arr_list.set(k++, L[i++]);
